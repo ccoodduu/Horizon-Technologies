@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 011f4b62329d65044960c71528f92afa, type: 3}
+  m_Name: OldOffice
+  m_EditorClassIdentifier: 
+  tables:
+  - {fileID: -2432090755550338912, guid: 2e2257e1fa8194e42b70d10f950049e5, type: 3}
+  - {fileID: -2432090755550338912, guid: cec6616892abb354da609ccab7095981, type: 3}
+  chairs:
+  - {fileID: -2432090755550338912, guid: d9bcfc1017c8ab34195e76f6cba2b423, type: 3}
+  - {fileID: -2432090755550338912, guid: 1f2a92f4bcf1b4a42a8fd0de5277504b, type: 3}
+  walls:
+  - {fileID: -2432090755550338912, guid: f413a769bedeb8f45b5e44a02aea51dd, type: 3}
+  - {fileID: -2432090755550338912, guid: 819793c1878e05b41afde052ee2137bd, type: 3}
+  - {fileID: -2432090755550338912, guid: c7e15e93bce8d434e9ed8c7540ef70ac, type: 3}
