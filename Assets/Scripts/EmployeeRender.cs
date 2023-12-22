@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class EmployeeRender : MonoBehaviour
 {
@@ -13,19 +15,49 @@ public class EmployeeRender : MonoBehaviour
 	public Employee employee;
 	private bool isRendered;
 
+	private TimeSpan offset;
+	
+	private bool wasInOffice = false;
+
+	private void Start()
+	{
+		offset = TimeSpan.FromMinutes(Random.Range(-10, 10));
+		ExitOffice();
+	}
+
 	private void Update()
 	{
-		if (!isRendered && employee != null)
+		if (employee != null)
 		{
-			isRendered = true;
-
 			hairMeshRenderer.material.color = employee.looks.hairColor;
 			skinMeshRenderer.material.color = employee.looks.skinColor;
 			shirtMeshRenderer.material.color = employee.looks.shirtColor;
 			pantsMeshRenderer.material.color = employee.looks.pantsColor;
 			shoesMeshRenderer.material.color = employee.looks.shoesColor;
 		}
+
+
+		var isInOffice = Game.i.time > Game.i.startOfficeTime.Add(offset) && Game.i.time < Game.i.endOfficeTime.Add(offset);
+
+		if (wasInOffice && !isInOffice) ExitOffice();
+		if (!wasInOffice && isInOffice) EnterOffice();
+
+		wasInOffice = isInOffice;
 	}
+	private void EnterOffice()
+	{
+		foreach (var mr in GetComponentsInChildren<MeshRenderer>())
+		{
+			mr.enabled = true;
+		}
+	}
+	private void ExitOffice()
+	{
+		foreach (var mr in GetComponentsInChildren<MeshRenderer>())
+		{
+			mr.enabled = false;
+		}
+	}	
 }
 
 public struct EmployeeLooks
