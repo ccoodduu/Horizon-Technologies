@@ -14,7 +14,10 @@ public class CameraSizer : MonoBehaviour
 
 		var size = height * Mathf.Sin(transform.rotation.eulerAngles.x * Mathf.Deg2Rad);
 
-		Camera.main.orthographicSize = size / 2 + 1;
+		foreach (var camera in GetComponentsInChildren<Camera>())
+		{
+			camera.orthographicSize = size / 2 + 1;
+		}
 		transform.position = new Vector3(height, height + wallHeight / 2, height);
 	}
 }
