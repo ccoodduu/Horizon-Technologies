@@ -28,6 +28,10 @@ public class Game : MonoBehaviour
 		DontDestroyOnLoad(this);
 
 		time = new DateTime(2000, 1, 1, 8, 0, 0);
+		desksOwned = 1;
+		employees = new List<Employee>();
+
+		employees.Add(new Employee());
 	}
 
 	void Update()
