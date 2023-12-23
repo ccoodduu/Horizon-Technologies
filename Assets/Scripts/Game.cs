@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -27,17 +28,22 @@ public class Game : MonoBehaviour
 
 
 	[Header("Money")]
-	public int money;
+	private int money;
+	public int Money { get => money; set => money = value; }
+
 
 	// [Header("Employees")]
 	public List<Employee> employees { get; private set; }
-	public List<Employee> availableEmployees { get; private set; }
+	public List<Employee> jobApplications { get; private set; }
 
 	public int desksOwned { get; private set; }
 
 	[Header("Office")]
 	public OfficeManager officeManager;
 	public OfficeType OfficeType => officeManager.officeType;
+
+	[Space(5)]
+	[SerializeField] private GameObject deskContainer;
 
 	[Header("UI")]
 	[SerializeField] private TMP_Text timeText;
@@ -52,9 +58,17 @@ public class Game : MonoBehaviour
 
 		time = foundingDate;
 		desksOwned = 1;
-		employees = new List<Employee>();
+		employees = new List<Employee>
+		{
+			Employee.You
+		};
 
-		employees.Add(new Employee());
+		jobApplications = new List<Employee>
+		{
+			Employee.You,
+			Employee.You,
+			Employee.You,
+		};
 	}
 
 	void Update()
@@ -88,7 +102,21 @@ public class Game : MonoBehaviour
 		if (previousTime.Month < time.Month) MonthPassed();
 		if (previousTime.Year < time.Year) YearPassed();
 
+        // Employees
+        foreach (var employee in employees)
+        {
+            if (!employee.hasDesk)
+			{
+				var employeeSpaces = deskContainer.GetComponentsInChildren<EmployeeRender>();
 
+				var emptySpace = employeeSpaces.FirstOrDefault(e => e.employee == null);
+				if (emptySpace != null)
+				{
+					employee.hasDesk = true;
+					emptySpace.employee = employee;
+				}
+            }
+        }
 	}
 
 	private void DayPassed()
@@ -113,10 +141,15 @@ public class Game : MonoBehaviour
 	{
 		if (desksOwned <= employees.Count) return;
 
-		availableEmployees.Remove(employee);
+		jobApplications.Remove(employee);
+		HirePanel.i.UpdatePanel();
+
 		employees.Add(employee);
+	}
 
-
+	public void Fire(Employee employee)
+	{
+		employees.Remove(employee);
 	}
 
 	private void SetTimeText()

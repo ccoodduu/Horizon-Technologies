@@ -13,7 +13,6 @@ public class EmployeeRender : MonoBehaviour
 	[SerializeField] MeshRenderer shoesMeshRenderer;
 
 	public Employee employee;
-	private bool isRendered;
 
 	private TimeSpan offset;
 	
@@ -38,6 +37,7 @@ public class EmployeeRender : MonoBehaviour
 
 
 		var isInOffice = Game.i.time > Game.i.startOfficeTime.Add(offset) && Game.i.time < Game.i.endOfficeTime.Add(offset);
+		isInOffice = isInOffice && employee != null;
 
 		if (wasInOffice && !isInOffice) ExitOffice();
 		if (!wasInOffice && isInOffice) EnterOffice();
