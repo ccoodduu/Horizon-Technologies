@@ -14,4 +14,9 @@ public class PanelButton : MonoBehaviour
     {
         target.SetActive(false);
     }
+
+	public void Toggle()
+	{
+		target.SetActive(!target.activeSelf);
+	}
 }

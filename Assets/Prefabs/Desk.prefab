@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8578698871204006547}
   - component: {fileID: 6160257497458665949}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Desk
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49,6 +49,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65f17440f87a084489dc6f7ff2b2ed59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tableMesh: {fileID: 5773627058356287390}
+  chairMesh: {fileID: 5773627058289276692}
+  wallMesh: {fileID: 5773627057977644752}
 --- !u!1001 &6154374180124437616
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -56,9 +59,25 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8578698871204006547}
     m_Modifications:
+    - target: {fileID: 9884162899117644, guid: 2ed9e269f4dc3154094be0374f8724b2, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1008969764277303932, guid: 2ed9e269f4dc3154094be0374f8724b2, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1547714106288638960, guid: 2ed9e269f4dc3154094be0374f8724b2, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 2478408740491816973, guid: 2ed9e269f4dc3154094be0374f8724b2, type: 3}
       propertyPath: m_Name
       value: Employee
+      objectReference: {fileID: 0}
+    - target: {fileID: 2478408740491816973, guid: 2ed9e269f4dc3154094be0374f8724b2, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2478408740491816973, guid: 2ed9e269f4dc3154094be0374f8724b2, type: 3}
       propertyPath: m_IsActive
@@ -107,6 +126,34 @@ PrefabInstance:
     - target: {fileID: 2478408740491816975, guid: 2ed9e269f4dc3154094be0374f8724b2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3360945704306342270, guid: 2ed9e269f4dc3154094be0374f8724b2, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3360945705145398879, guid: 2ed9e269f4dc3154094be0374f8724b2, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5992516146945035910, guid: 2ed9e269f4dc3154094be0374f8724b2, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5992516147984892327, guid: 2ed9e269f4dc3154094be0374f8724b2, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563617624124388137, guid: 2ed9e269f4dc3154094be0374f8724b2, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8326416048605151909, guid: 2ed9e269f4dc3154094be0374f8724b2, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9056411712837811861, guid: 2ed9e269f4dc3154094be0374f8724b2, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2ed9e269f4dc3154094be0374f8724b2, type: 3}
@@ -170,6 +217,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: PC
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 6170d5ce75f9c4547b19438084bc4fb3, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: 6170d5ce75f9c4547b19438084bc4fb3, type: 3}
+      propertyPath: m_Name
+      value: pc
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: 6170d5ce75f9c4547b19438084bc4fb3, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6170d5ce75f9c4547b19438084bc4fb3, type: 3}
 --- !u!4 &8108467619881017798 stripped
@@ -230,14 +289,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 54b1e946f56ca0847ad194a087ae4fb3, type: 3}
       propertyPath: m_Name
-      value: Office_Chair_Black_01
+      value: Chair
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 54b1e946f56ca0847ad194a087ae4fb3, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 54b1e946f56ca0847ad194a087ae4fb3, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: 54b1e946f56ca0847ad194a087ae4fb3, type: 3}
+      propertyPath: m_Name
+      value: chair
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: 54b1e946f56ca0847ad194a087ae4fb3, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 54b1e946f56ca0847ad194a087ae4fb3, type: 3}
+--- !u!33 &5773627058289276692 stripped
+MeshFilter:
+  m_CorrespondingSourceObject: {fileID: -6400281290468069383, guid: 54b1e946f56ca0847ad194a087ae4fb3, type: 3}
+  m_PrefabInstance: {fileID: 8578698870076741869}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8108467619402972934 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 54b1e946f56ca0847ad194a087ae4fb3, type: 3}
@@ -296,14 +372,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 9d5dc0350fc9741428112624d61c5c4f, type: 3}
       propertyPath: m_Name
-      value: Office_Table_White_2x1_01
+      value: Table
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 9d5dc0350fc9741428112624d61c5c4f, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 1151388028547126963, guid: 9d5dc0350fc9741428112624d61c5c4f, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: 9d5dc0350fc9741428112624d61c5c4f, type: 3}
+      propertyPath: m_Name
+      value: table
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: 9d5dc0350fc9741428112624d61c5c4f, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d5dc0350fc9741428112624d61c5c4f, type: 3}
+--- !u!33 &5773627058356287390 stripped
+MeshFilter:
+  m_CorrespondingSourceObject: {fileID: -6400281290468069383, guid: 9d5dc0350fc9741428112624d61c5c4f, type: 3}
+  m_PrefabInstance: {fileID: 8578698870144014439}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8108467619336028044 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9d5dc0350fc9741428112624d61c5c4f, type: 3}
@@ -366,7 +459,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 17d508ed6ba20024dbd6848ea51fc4c2, type: 3}
       propertyPath: m_Name
-      value: Office_Cubicle_White_01
+      value: Wall
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 17d508ed6ba20024dbd6848ea51fc4c2, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 1151388028547126963, guid: 17d508ed6ba20024dbd6848ea51fc4c2, type: 3}
       propertyPath: m_LocalPosition.x
@@ -376,8 +473,21 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: 17d508ed6ba20024dbd6848ea51fc4c2, type: 3}
+      propertyPath: m_Name
+      value: wall
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: 17d508ed6ba20024dbd6848ea51fc4c2, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 17d508ed6ba20024dbd6848ea51fc4c2, type: 3}
+--- !u!33 &5773627057977644752 stripped
+MeshFilter:
+  m_CorrespondingSourceObject: {fileID: -6400281290468069383, guid: 17d508ed6ba20024dbd6848ea51fc4c2, type: 3}
+  m_PrefabInstance: {fileID: 8578698870367009065}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8108467619112705730 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 17d508ed6ba20024dbd6848ea51fc4c2, type: 3}

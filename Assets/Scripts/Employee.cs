@@ -13,6 +13,8 @@ public class Employee
 	public TimeSpan experience => Game.i.time.Subtract(workedSince);
 
     public bool hasDesk;
+	public EmployeeRender employeeRender;
+
 
 	public EmployeeLooks looks;
 

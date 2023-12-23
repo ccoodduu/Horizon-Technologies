@@ -57,7 +57,7 @@ public class Game : MonoBehaviour
 		DontDestroyOnLoad(this);
 
 		time = foundingDate;
-		desksOwned = 1;
+		desksOwned = 0;
 		employees = new List<Employee>
 		{
 			Employee.You
@@ -69,6 +69,8 @@ public class Game : MonoBehaviour
 			Employee.You,
 			Employee.You,
 		};
+
+		BuyDeskFree();
 	}
 
 	void Update()
@@ -114,6 +116,7 @@ public class Game : MonoBehaviour
 				{
 					employee.hasDesk = true;
 					emptySpace.employee = employee;
+					employee.employeeRender = emptySpace;
 				}
             }
         }
@@ -145,12 +148,41 @@ public class Game : MonoBehaviour
 		HirePanel.i.UpdatePanel();
 
 		employees.Add(employee);
+		EmployeesPanel.i.UpdatePanel();
 	}
 
 	public void Fire(Employee employee)
 	{
+		employee.employeeRender.employee = null;
+
 		employees.Remove(employee);
+		EmployeesPanel.i.UpdatePanel();
 	}
+
+	public void BuyDesk()
+	{
+		if (money < 100) return;
+		if (officeManager.desks.Length <= desksOwned) return;
+
+		money -= 100;
+		BuyDeskFree();
+	}
+	public void BuyDeskFree()
+	{
+		if (officeManager.desks.Length <= desksOwned) return;
+
+		desksOwned++;
+
+        foreach (var desk in officeManager.desks)
+        {
+			if (desk.activeSelf) continue;
+
+			desk.SetActive(true);
+			return;
+        }
+
+		throw new Exception("more desks active than bought");
+    }
 
 	private void SetTimeText()
 	{
