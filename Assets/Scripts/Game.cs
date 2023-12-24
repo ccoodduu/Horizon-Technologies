@@ -65,9 +65,11 @@ public class Game : MonoBehaviour
 
 		jobApplications = new List<Employee>
 		{
-			Employee.You,
-			Employee.You,
-			Employee.You,
+			Employee.Generate(),
+			Employee.Generate(),
+			Employee.Generate(),
+			Employee.Generate(),
+			Employee.Generate(),
 		};
 
 		BuyDeskFree();

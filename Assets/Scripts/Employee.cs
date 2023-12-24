@@ -1,37 +1,149 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Employee
 {
-    public int salary;
-    public string name_;
-    public int age;
-    public DateTime employedSince;
-    public DateTime workedSince; // experience
-	public TimeSpan experience => Game.i.time.Subtract(workedSince);
-
-    public bool hasDesk;
-	public EmployeeRender employeeRender;
-
+	public int salary;
+	public string name_;
+	public int age;
+	public DateTime employedSince;
+	public DateTime workedSince; // experience
+	public Skill[] skills;
 
 	public EmployeeLooks looks;
 
-    public static Employee You => new Employee("You", 0, 21, TimeSpan.Zero);
-    
-    public static Employee Generate()
-    {
-        return You;
-    }
+	public TimeSpan experience => Game.i.time.Subtract(workedSince);
+
+	public bool hasDesk;
+	public EmployeeRender employeeRender;
+
+	public static Employee You => new Employee("You", 0, 22, TimeSpan.Zero);
+
+	public static Employee Generate()
+	{
+		float overallFactor = Random.Range(.8f, GetOverallFactorFromCompanyAge(Game.i.companyAge));
+
+		string firstName = EmployeeGeneratorData.firstName[Random.Range(0, EmployeeGeneratorData.firstName.Length)];
+		string lastName = EmployeeGeneratorData.lastName[Random.Range(0, EmployeeGeneratorData.lastName.Length)];
+
+		int baseSalary = Random.Range(7500, 10000);
+		int adjustedSalary = Mathf.RoundToInt(baseSalary * overallFactor);
+
+		int baseAge = Random.Range(22, 40);
+		int adjustedAge = Mathf.RoundToInt(baseAge * overallFactor);
+
+		TimeSpan baseExperience = TimeSpan.FromDays(Random.Range(0, 3650));
+		TimeSpan adjustedExperience = TimeSpan.FromDays(baseExperience.TotalDays * overallFactor);
+
+		Employee employee = new Employee(firstName + " " + lastName, adjustedSalary, adjustedAge, adjustedExperience);
+		employee.skills = GenerateRandomSkills(overallFactor);
+
+		return employee;
+	}
+
+	private static float GetOverallFactorFromCompanyAge(TimeSpan companyAge)
+	{
+		float baseFactor = 1f;
+
+		float increasePerYear = 0.1f;
+		float overallFactor = Mathf.Clamp(baseFactor + increasePerYear * ((float)companyAge.TotalDays / 365f), 1f, 2.0f);
+
+		return overallFactor;
+	}
+
+	private static Skill[] GenerateRandomSkills(float overallFactor)
+	{
+		List<Skill> allSkills = new List<Skill>((Skill[])Enum.GetValues(typeof(Skill)));
+		List<Skill> randomSkills = new List<Skill>();
+
+		// Adjust the number of skills based on the overallFactor
+		int numSkills = Mathf.RoundToInt(Random.Range(1, 4) * overallFactor);
+
+		// Define skill categories (you can customize this based on your skills)
+		Dictionary<Skill, string> skillCategories = new Dictionary<Skill, string>
+		{
+			{ Skill.CSharp, "Programming" },
+			{ Skill.CPP, "Programming" },
+			{ Skill.C, "Programming" },
+			{ Skill.Java, "Programming" },
+			{ Skill.JavaScript, "Programming" },
+			{ Skill.HTML, "Web Development" },
+			{ Skill.CSS, "Web Development" },
+			{ Skill.Python, "Programming" },
+			{ Skill.PHP, "Web Development" },
+			{ Skill.SQL, "Database" },
+			{ Skill.dotNET, "Programming" },
+			{ Skill.React, "Web Development" },
+			{ Skill.Angular, "Web Development" },
+			{ Skill.Nodejs, "Web Development" },
+			{ Skill.DevOps, "DevOps" },
+			{ Skill.Docker, "DevOps" },
+		};
+
+		// Iterate through skill categories to bias the selection
+		foreach (var category in skillCategories.Values.Distinct())
+		{
+			List<Skill> categorySkills = skillCategories.Where(pair => pair.Value == category).Select(pair => pair.Key).ToList();
+
+			// Calculate the number of skills to select from this category
+			int categorySkillsCount = Mathf.RoundToInt(numSkills * Random.Range(0.2f, 0.8f));
+
+			// Randomly select skills from the current category
+			for (int i = 0; i < categorySkillsCount && categorySkills.Count > 0; i++)
+			{
+				int randomIndex = Random.Range(0, categorySkills.Count);
+				randomSkills.Add(categorySkills[randomIndex]);
+				categorySkills.RemoveAt(randomIndex);
+			}
+		}
+
+		// Fill in the remaining skills with random ones
+		for (int i = randomSkills.Count; i < numSkills; i++)
+		{
+			int randomIndex = Random.Range(0, allSkills.Count);
+			randomSkills.Add(allSkills[randomIndex]);
+			allSkills.RemoveAt(randomIndex);
+		}
+
+		return randomSkills.ToArray();
+	}
 
 	public Employee(string name, int salary, int age, TimeSpan experience)
 	{
-        name_ = name;
-        this.salary = salary;
-        this.age = age;
-        workedSince = Game.i.time.Subtract(experience);
+		name_ = name;
+		this.salary = salary;
+		this.age = age;
+		workedSince = Game.i.time.Subtract(experience);
 
-        looks = EmployeeLooks.RandomLooks();
+		looks = EmployeeLooks.RandomLooks();
 	}
+}
+
+public static class EmployeeGeneratorData
+{
+	public static string[] firstName = new string[]
+	{
+		"Alice", "Bob", "Charlie", "David", "Emma", "Frank", "Grace", "Henry", "Ivy", "Jack",
+		"Leo", "Mia", "Noah", "Olivia", "Quinn", "Samuel", "Taylor",
+		"Ava", "Benjamin", "Chloe", "Daniel", "Eva", "Felix", "Georgia", "Harrison", "Isabel", "Jacob",
+		"Liam", "Madison", "Nathan", "Oscar", "Penelope", "Rebecca", "Sebastian", "Tara",
+		"Brandon", "Cassandra", "Derek", "Eliza", "Fiona", "Gavin", "Heather", "Isaiah", "Jasmine",
+		"Kevin", "Luna", "Mason", "Natalie", "Olive", "Patrick", "Quincy", "Riley", "Samantha", "Trevor",
+		"Violet", "Wyatt", "Zion"
+	};
+
+	public static string[] lastName = new string[]
+	{
+		"Anderson", "Brown", "Carter", "Davis", "Evans", "Fisher", "Garcia", "Hill", "Irwin", "Johnson",
+		"Keller", "Lopez", "Miller", "Nelson", "Owens", "Perez", "Quinn", "Reyes", "Smith", "Taylor",
+		"Underwood", "Vargas", "Williams", "Young", "Zimmerman", "Adams", "Baker", "Clark", "Diaz",
+		"Edwards", "Fletcher", "Gomez", "Hall", "Ingram", "Jenkins", "Kim", "Lambert", "Morgan", "Nguyen",
+		"O'Brien", "Parker", "Quigley", "Reid", "Stewart", "Tucker", "Underhill", "Valentine", "Woods", "Archer",
+		"Bennett", "Cunningham", "Duncan", "Emerson", "Floyd", "Galloway", "Hawkins", "Jefferson", "Kendrick",
+		"Montgomery", "Nash", "Ortega", "Pierce", "Roth", "Sullivan", "Thompson", "Vance", "Webster", "York"
+	};
 }
