@@ -6,11 +6,12 @@ using UnityEngine.UI;
 
 public class EmployeeUI : MonoBehaviour
 {
-    [Header("Text")]
-    [SerializeField] private TMP_Text nameText;
+	[Header("Text")]
+	[SerializeField] private TMP_Text nameText;
 	[SerializeField] private TMP_Text ageText;
-    [SerializeField] private TMP_Text experienceText;
-    [SerializeField] private TMP_Text salaryText;
+	[SerializeField] private TMP_Text experienceText;
+	[SerializeField] private TMP_Text salaryText;
+	[SerializeField] private TMP_Text skillText;
 
 	[Header("Image")]
 	[SerializeField] private Image hairImage;
@@ -18,20 +19,29 @@ public class EmployeeUI : MonoBehaviour
 	[SerializeField] private Image shirtImage;
 
 	[Header("Buttons")]
-    [SerializeField] private Button hireButton;
+	[SerializeField] private Button hireButton;
 	[SerializeField] private Button fireButton;
 
-	public Employee employee {  get; private set; }
+	public Employee employee { get; private set; }
 
 	public void SetParameters(Employee employee, EmployeeUIType type)
-    {
-        this.employee = employee;
+	{
+		this.employee = employee;
 
 		// text
-        nameText.text = employee.name_;
-		ageText.text = "Age: " + employee.age;
-        experienceText.text = "Exp: " + ((int)employee.experience.TotalDays / 365) + "y";
-        salaryText.text = "Salary: " + employee.salary + "$/m";
+		nameText.text = employee.name_;
+		ageText.text = employee.age + "y/o";
+		experienceText.text = "Exp: " + ((int)employee.experience.TotalDays / 365) + "y";
+		salaryText.text = employee.salary + "$/m";
+
+		var skillsTextString = "";
+		foreach (var skill in employee.skills)
+		{
+			if (skillsTextString != "") skillsTextString += ", ";
+			skillsTextString += SkillToString(skill);
+		}
+
+		skillText.text = skillsTextString;
 
 		// image
 		hairImage.color = employee.looks.hairColor;
@@ -58,12 +68,28 @@ public class EmployeeUI : MonoBehaviour
 		}
 	}
 
+	public static string SkillToString(Skill skill)
+	{
+		switch (skill)
+		{
+			case Skill.CSharp:
+				return "C#";
+			case Skill.CPP:
+				return "C++";
+			case Skill.dotNET:
+				return ".NET";
+			case Skill.Nodejs:
+				return "Node.js";
+			default:
+				return skill.ToString();
+		}
+	}
 	public void Hire()
-    {
-        if (employee == null) return;
+	{
+		if (employee == null) return;
 
-        Game.i.Hire(employee);
-    }
+		Game.i.Hire(employee);
+	}
 
 	public void Fire()
 	{
@@ -76,7 +102,7 @@ public class EmployeeUI : MonoBehaviour
 
 public enum EmployeeUIType
 {
-    Hire,
-    Fire,
-    Show,
+	Hire,
+	Fire,
+	Show,
 }
