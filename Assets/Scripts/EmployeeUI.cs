@@ -38,7 +38,7 @@ public class EmployeeUI : MonoBehaviour
 		foreach (var skill in employee.skills)
 		{
 			if (skillsTextString != "") skillsTextString += ", ";
-			skillsTextString += SkillToString(skill);
+			skillsTextString += skill.ToDisplayText();
 		}
 
 		skillText.text = skillsTextString;
@@ -68,22 +68,6 @@ public class EmployeeUI : MonoBehaviour
 		}
 	}
 
-	public static string SkillToString(Skill skill)
-	{
-		switch (skill)
-		{
-			case Skill.CSharp:
-				return "C#";
-			case Skill.CPP:
-				return "C++";
-			case Skill.dotNET:
-				return ".NET";
-			case Skill.Nodejs:
-				return "Node.js";
-			default:
-				return skill.ToString();
-		}
-	}
 	public void Hire()
 	{
 		if (employee == null) return;

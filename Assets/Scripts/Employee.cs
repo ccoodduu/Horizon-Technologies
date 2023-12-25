@@ -27,9 +27,6 @@ public class Employee
 	{
 		float overallFactor = Random.Range(.8f, GetOverallFactorFromCompanyAge(Game.i.companyAge));
 
-		string firstName = EmployeeGeneratorData.firstName[Random.Range(0, EmployeeGeneratorData.firstName.Length)];
-		string lastName = EmployeeGeneratorData.lastName[Random.Range(0, EmployeeGeneratorData.lastName.Length)];
-
 		int baseSalary = Random.Range(6000, 10000);
 		int adjustedSalary = Mathf.RoundToInt(baseSalary * overallFactor);
 
@@ -39,7 +36,7 @@ public class Employee
 		TimeSpan baseExperience = TimeSpan.FromDays(Random.Range(0, 1000 * overallFactor));
 		TimeSpan adjustedExperience = TimeSpan.FromDays(baseExperience.TotalDays * overallFactor);
 
-		Employee employee = new Employee(firstName + " " + lastName, adjustedSalary, adjustedAge, adjustedExperience, GenerateRandomSkills(overallFactor));
+		Employee employee = new Employee(NameGenerator.GenerateName(), adjustedSalary, adjustedAge, adjustedExperience, GenerateRandomSkills(overallFactor));
 
 		return employee;
 	}
@@ -148,8 +145,22 @@ public class Employee
 	}
 }
 
-public static class EmployeeGeneratorData
+public static class NameGenerator
 {
+	public static string RandomFirstName() => firstName[Random.Range(0, firstName.Length)];
+
+	public static string RandomLastName() => lastName[Random.Range(0, lastName.Length)];
+
+
+	public static string GenerateName()
+	{
+		string firstName = RandomFirstName();
+		string lastName = RandomLastName();
+
+		return firstName + " " + lastName;
+	}
+
+
 	public static string[] firstName = new string[]
 	{
 		"Alice", "Bob", "Charlie", "David", "Emma", "Frank", "Grace", "Henry", "Ivy", "Jack",

@@ -21,16 +21,29 @@ public class Game : MonoBehaviour
 	public bool IsOfficeTime => (time.Hour >= startOfficeHour && time.Hour < endOfficeHour);
 	public DateTime startOfficeTime => time.Subtract(time.TimeOfDay).Add(TimeSpan.FromHours(startOfficeHour));
 	public DateTime endOfficeTime => time.Subtract(time.TimeOfDay).Add(TimeSpan.FromHours(endOfficeHour));
-	public TimeSpan companyAge => time.Subtract(foundingDate);
+	public TimeSpan dailyOfficeTime => endOfficeTime - startOfficeTime;
 
+	public TimeSpan companyAge => time.Subtract(foundingDate);
 
 	private bool skipToNextDay;
 
 
 	[Header("Money")]
 	private int money;
-	public int Money { get => money; set => money = value; }
+	public int Money
+	{
+		get => money;
+		set
+		{
+			moneyText.text = value + " $";
+			money = value;
+		}
+	}
+	private float reputation = 1; // from 1-10
 
+	// [Header("Orders")]
+	public List<Order> currentOrders { get; private set; }
+	public List<Order> availableOrders { get; private set; }
 
 	// [Header("Employees")]
 	public List<Employee> employees { get; private set; }
@@ -48,6 +61,9 @@ public class Game : MonoBehaviour
 	[Header("UI")]
 	[SerializeField] private TMP_Text timeText;
 	[SerializeField] private TMP_Text dateText;
+	[SerializeField] private TMP_Text moneyText;
+
+	public string companyName;
 
 	public static Game i;
 	void Awake()
@@ -58,6 +74,8 @@ public class Game : MonoBehaviour
 
 		time = foundingDate;
 		desksOwned = 0;
+		Money = 10000;
+
 		employees = new List<Employee>
 		{
 			Employee.You
@@ -73,6 +91,13 @@ public class Game : MonoBehaviour
 		};
 
 		BuyDeskFree();
+
+		availableOrders = new List<Order>
+		{
+			new Order(OrderList.list[20]),
+			new Order(OrderList.list[21]),
+			new Order(OrderList.list[22])
+		};
 	}
 
 	void Update()
@@ -106,10 +131,10 @@ public class Game : MonoBehaviour
 		if (previousTime.Month < time.Month) MonthPassed();
 		if (previousTime.Year < time.Year) YearPassed();
 
-        // Employees
-        foreach (var employee in employees)
-        {
-            if (!employee.hasDesk)
+		// Employees
+		foreach (var employee in employees)
+		{
+			if (!employee.hasDesk)
 			{
 				var employeeSpaces = deskContainer.GetComponentsInChildren<EmployeeRender>();
 
@@ -120,8 +145,8 @@ public class Game : MonoBehaviour
 					emptySpace.employee = employee;
 					employee.employeeRender = emptySpace;
 				}
-            }
-        }
+			}
+		}
 	}
 
 	private void DayPassed()
@@ -138,7 +163,7 @@ public class Game : MonoBehaviour
 	{
 		foreach (var employee in employees)
 		{
-			money -= employee.salary;
+			Money -= employee.salary;
 		}
 	}
 
@@ -163,10 +188,11 @@ public class Game : MonoBehaviour
 
 	public void BuyDesk()
 	{
-		if (money < 100) return;
+		var price = 100;
+		if (Money < price) return;
 		if (officeManager.desks.Length <= desksOwned) return;
 
-		money -= 100;
+		Money -= price;
 		BuyDeskFree();
 	}
 	public void BuyDeskFree()
@@ -175,16 +201,16 @@ public class Game : MonoBehaviour
 
 		desksOwned++;
 
-        foreach (var desk in officeManager.desks)
-        {
+		foreach (var desk in officeManager.desks)
+		{
 			if (desk.activeSelf) continue;
 
 			desk.SetActive(true);
 			return;
-        }
+		}
 
 		throw new Exception("more desks active than bought");
-    }
+	}
 
 	private void SetTimeText()
 	{

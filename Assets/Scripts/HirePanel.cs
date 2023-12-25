@@ -15,6 +15,7 @@ public class HirePanel : MonoBehaviour
 		i = this;
 
 		UpdatePanel();	
+		gameObject.SetActive(false);
 	}
 
 	public void UpdatePanel()
