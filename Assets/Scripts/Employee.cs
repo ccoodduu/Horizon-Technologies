@@ -21,6 +21,8 @@ public class Employee
 	public bool hasDesk;
 	public EmployeeRender employeeRender;
 
+	public bool canWork => hasDesk;
+
 	public static Employee You => new Employee("You", 0, 22, TimeSpan.Zero, new Skill[] { Skill.HTML, Skill.JavaScript, Skill.CSS });
 
 	public static Employee Generate()

@@ -62,6 +62,7 @@ public class Game : MonoBehaviour
 	[SerializeField] private TMP_Text timeText;
 	[SerializeField] private TMP_Text dateText;
 	[SerializeField] private TMP_Text moneyText;
+	[SerializeField] private TMP_Text currentOrdersText;
 
 	public string companyName;
 
@@ -98,6 +99,14 @@ public class Game : MonoBehaviour
 			new Order(OrderList.list[21]),
 			new Order(OrderList.list[22])
 		};
+
+		currentOrders = new List<Order>
+		{
+			new Order(OrderList.list[23]),
+			new Order(OrderList.list[24])
+		};
+
+		currentOrders[0].assignedEmployees.Add(employees[0]);
 	}
 
 	void Update()
@@ -147,6 +156,25 @@ public class Game : MonoBehaviour
 				}
 			}
 		}
+
+		// Orders
+		if (IsOfficeTime)
+		{
+			var workedTime = TimeSpan.FromSeconds(Time.deltaTime * timeSpeed);
+
+			foreach (var order in new List<Order>(currentOrders))
+			{
+				var workedPoints = (float)workedTime.TotalHours * order.GetWorkingSpeed();
+				order.workedPoints += workedPoints;
+
+				if (order.Completion > 1f)
+				{
+					CompleteOrder(order);
+				}
+			}
+		}
+
+		SetOrderText();
 	}
 
 	private void DayPassed()
@@ -165,6 +193,29 @@ public class Game : MonoBehaviour
 		{
 			Money -= employee.salary;
 		}
+	}
+
+	public void TakeOrder(Order order)
+	{
+		availableOrders.Remove(order);
+		currentOrders.Add(order);
+	}
+
+	private void CompleteOrder(Order order)
+	{
+		if (order.Completion < 1f)
+		{
+			Money -= 100;
+			currentOrders.Remove(order);
+
+			return;
+		}
+
+		var timeFee = (order.deadline > time) ? 0f : (float)(order.deadline - time).TotalDays;
+
+		Money += order.Payment + (int)timeFee * -100;
+
+		currentOrders.Remove(order);
 	}
 
 	public void Hire(Employee employee)
@@ -237,6 +288,26 @@ public class Game : MonoBehaviour
 		text += "\n" + time.DayOfWeek.ToString();
 
 		dateText.text = text;
+	}
+
+	private void SetOrderText()
+	{
+		var text = "";
+
+		foreach (var order in currentOrders)
+		{
+			if (text != "") text += "\n";
+
+			var workingSpeed = order.GetWorkingSpeed();
+
+			var remainingPoint = order.orderDescription.workPoints - order.workedPoints;
+			var remainingHours = remainingPoint / workingSpeed;
+
+			text += Math.Floor(order.Completion * 100) + "% - " + order.orderDescription.name + 
+				" - Time left: " + (remainingHours == float.PositiveInfinity ? "N/A" : Mathf.RoundToInt(remainingHours) + " hr");
+		}
+
+		currentOrdersText.text = text;
 	}
 
 	public void SkipToNextDay()

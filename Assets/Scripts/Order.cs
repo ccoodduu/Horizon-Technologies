@@ -8,11 +8,15 @@ using Random = UnityEngine.Random;
 
 public class Order
 {
+	public float difficultyMultiplier;
+
 	public OrderDescription orderDescription;
 	public string ownerName;
 	public DateTime deadline;
 	public List<Employee> assignedEmployees;
 	public float workedPoints;
+
+	public int Payment => Mathf.RoundToInt(orderDescription.payment * ((difficultyMultiplier - 1) * 2 + 1));
 
 	public float Completion => workedPoints / orderDescription.workPoints;
 
@@ -21,7 +25,7 @@ public class Order
 		this.orderDescription = orderDescription;
 		ownerName = NameGenerator.GenerateName();
 		deadline = Game.i.time + TimeSpan.FromHours(
-			(orderDescription.workPoints / Game.i.dailyOfficeTime.TotalHours * 24) / difficultyMultiplier + 24 * 5
+			(orderDescription.workPoints / Game.i.dailyOfficeTime.TotalHours * 24) / 5 * 7 / difficultyMultiplier + 24 * 5
 		); // Five days after a single employee could have finished the job in normal conditions
 		deadline = deadline.Add(TimeSpan.FromDays(1) - deadline.TimeOfDay); // Round to midnight
 
@@ -33,8 +37,11 @@ public class Order
 	public float GetWorkingSpeed()
 	{
 		var skillCounts = new Dictionary<Skill, int>();
+		foreach (var skill in (Skill[])Enum.GetValues(typeof(Skill))) skillCounts.Add(skill, 0);
+
 		foreach (var employee in assignedEmployees)
 		{
+			if (!employee.canWork) continue;
 			foreach (var skill in employee.skills) skillCounts[skill] += 1;
 		}
 

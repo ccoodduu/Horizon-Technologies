@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class CameraMovement : MonoBehaviour
 {
@@ -27,6 +28,7 @@ public class CameraMovement : MonoBehaviour
 		var c = Camera.main;
 
 		var ratio = (Camera.main.ScreenToWorldPoint(new Vector3(1, 0, 0)) - Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0))).magnitude;
+
 		// Panning
 		if (Input.GetMouseButtonDown(2))
 		{
@@ -45,12 +47,15 @@ public class CameraMovement : MonoBehaviour
 		}
 
 		// Zooming
-		var s = Input.GetAxis("Mouse ScrollWheel");
-
-		var size = c.orthographicSize * Mathf.Pow(zoomFactor, -s);
-		foreach (var camera in cameras)
+		if (!EventSystem.current.IsPointerOverGameObject())
 		{
-			camera.orthographicSize = Mathf.Clamp(size, minSize, maxSize);
+			var s = Input.GetAxis("Mouse ScrollWheel");
+
+			var size = c.orthographicSize * Mathf.Pow(zoomFactor, -s);
+			foreach (var camera in cameras)
+			{
+				camera.orthographicSize = Mathf.Clamp(size, minSize, maxSize);
+			}
 		}
 
 		// Clamp Pos
