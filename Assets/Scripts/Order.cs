@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -19,6 +18,15 @@ public class Order
 	public int Payment => Mathf.RoundToInt(orderDescription.payment * ((difficultyMultiplier - 1) * 2 + 1));
 
 	public float Completion => workedPoints / orderDescription.workPoints;
+
+	public static Order Genereate()
+	{
+		var order = OrderList.list.Random();
+
+		var difficulty = Random.Range(1f, Game.i.Reputation / 2);
+
+		return new Order(order, difficulty);
+	}
 
 	public Order(OrderDescription orderDescription, float difficultyMultiplier = 1.0f)
 	{
@@ -115,6 +123,8 @@ public enum Skill
 
 public static class OrderList
 {
+	public static Dictionary<int, int> frequencies = new Dictionary<int, int>();
+
 	public static OrderDescription[] list = new OrderDescription[]
 	{
 		new OrderDescription

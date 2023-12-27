@@ -3,19 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 using Random = UnityEngine.Random;
 
 public class Employee
 {
 	public int salary;
 	public string name_;
-	public int age;
+	private DateTime birthday;
 	public DateTime employedSince;
 	public DateTime workedSince; // experience
 	public Skill[] skills;
 
 	public EmployeeLooks looks;
 
+	public Order assignedOrder;
+	public int age => ((int)(Game.i.time - birthday).TotalDays / 365);
 	public TimeSpan experience => Game.i.time.Subtract(workedSince);
 
 	public bool hasDesk;
@@ -27,7 +30,8 @@ public class Employee
 
 	public static Employee Generate()
 	{
-		float overallFactor = Random.Range(.8f, GetOverallFactorFromCompanyAge(Game.i.companyAge));
+		var maxFator = GetOverallFactorFromReputation(Game.i.Reputation);
+		float overallFactor = Random.Range(maxFator * .7f, maxFator);
 
 		int baseSalary = Random.Range(6000, 10000);
 		int adjustedSalary = Mathf.RoundToInt(baseSalary * overallFactor);
@@ -43,12 +47,11 @@ public class Employee
 		return employee;
 	}
 
-	private static float GetOverallFactorFromCompanyAge(TimeSpan companyAge)
+	private static float GetOverallFactorFromReputation(float reputation)
 	{
 		float baseFactor = 1f;
 
-		float increasePerYear = 0.1f;
-		float overallFactor = Mathf.Clamp(baseFactor + increasePerYear * ((float)companyAge.TotalDays / 365f), 1f, 2.0f);
+		float overallFactor = Mathf.Clamp(baseFactor + reputation * 0.1f, 1f, 2.0f);
 
 		return overallFactor;
 	}
@@ -139,11 +142,20 @@ public class Employee
 	{
 		name_ = name;
 		this.salary = salary;
-		this.age = age;
+		this.birthday = Game.i.time - TimeSpan.FromDays(age * 365) + TimeSpan.FromDays(Random.Range(0, 364));
 		workedSince = Game.i.time.Subtract(experience);
 		this.skills = skills;
 
 		looks = EmployeeLooks.RandomLooks();
+	}
+
+	public void SetAssignedOrder(Order order)
+	{
+		if (assignedOrder != null) assignedOrder.assignedEmployees.Remove(this);
+
+		if (order != null) order.assignedEmployees.Add(this);
+
+		assignedOrder = order;
 	}
 }
 

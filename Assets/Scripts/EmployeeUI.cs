@@ -14,9 +14,7 @@ public class EmployeeUI : MonoBehaviour
 	[SerializeField] private TMP_Text skillText;
 
 	[Header("Image")]
-	[SerializeField] private Image hairImage;
-	[SerializeField] private Image headImage;
-	[SerializeField] private Image shirtImage;
+	[SerializeField] private EmployeeImage employeeImage;
 
 	[Header("Buttons")]
 	[SerializeField] private Button hireButton;
@@ -24,9 +22,12 @@ public class EmployeeUI : MonoBehaviour
 
 	public Employee employee { get; private set; }
 
+	private EmployeeUIType type;
+
 	public void SetParameters(Employee employee, EmployeeUIType type)
 	{
 		this.employee = employee;
+		this.type = type;
 
 		// text
 		nameText.text = employee.name_;
@@ -44,9 +45,7 @@ public class EmployeeUI : MonoBehaviour
 		skillText.text = skillsTextString;
 
 		// image
-		hairImage.color = employee.looks.hairColor;
-		headImage.color = employee.looks.skinColor;
-		shirtImage.color = employee.looks.shirtColor;
+		employeeImage.SetImage(employee);
 
 		// button
 		switch (type)
@@ -80,6 +79,14 @@ public class EmployeeUI : MonoBehaviour
 		if (employee == null) return;
 
 		Game.i.Fire(employee);
+	}
+
+	public void OpenFullPanel()
+	{
+		if (employee == null) return;
+		if (type is EmployeeUIType.Hire) return;
+
+		EmployeeViewPanel.i.Open(employee);
 	}
 }
 

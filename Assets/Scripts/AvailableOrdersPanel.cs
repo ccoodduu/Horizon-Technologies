@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class OrdersPanel : MonoBehaviour
+public class AvailableOrdersPanel : MonoBehaviour
 {
-	public static OrdersPanel i;
+	public static AvailableOrdersPanel i;
 
     [SerializeField] private GameObject OrderUIPrefab;
     [SerializeField] private GameObject OrderUIContainer;
@@ -20,7 +20,7 @@ public class OrdersPanel : MonoBehaviour
 
 	public void UpdatePanel()
 	{
-		var currentShown = GetComponentsInChildren<OrderUISmall>();
+		var currentShown = GetComponentsInChildren<OrderUI>();
 
 		foreach (var o in Game.i.availableOrders)
 			if (!currentShown.Any(a => a.order == o)) SpawnOrderUI(o);
@@ -33,7 +33,7 @@ public class OrdersPanel : MonoBehaviour
 	{
 		var gameObject = Instantiate(OrderUIPrefab, OrderUIContainer.transform);
 
-		var oUI = gameObject.GetComponent<OrderUISmall>();
+		var oUI = gameObject.GetComponent<OrderUI>();
 		oUI.SetParameters(order);
 	}
 }

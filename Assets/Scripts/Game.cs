@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Game : MonoBehaviour
 {
@@ -39,7 +40,8 @@ public class Game : MonoBehaviour
 			money = value;
 		}
 	}
-	private float reputation = 1; // from 1-10
+	private float reputation;
+	public float Reputation { get => reputation; private set { reputation = Mathf.Clamp(value, 1f, 10f); } } // from 1-10
 
 	// [Header("Orders")]
 	public List<Order> currentOrders { get; private set; }
@@ -84,29 +86,20 @@ public class Game : MonoBehaviour
 
 		jobApplications = new List<Employee>
 		{
-			Employee.Generate(),
-			Employee.Generate(),
-			Employee.Generate(),
-			Employee.Generate(),
-			Employee.Generate(),
+
 		};
 
 		BuyDeskFree();
 
 		availableOrders = new List<Order>
 		{
-			new Order(OrderList.list[20]),
-			new Order(OrderList.list[21]),
-			new Order(OrderList.list[22])
+			new Order(OrderList.list[0]),
 		};
 
 		currentOrders = new List<Order>
 		{
-			new Order(OrderList.list[23]),
-			new Order(OrderList.list[24])
-		};
 
-		currentOrders[0].assignedEmployees.Add(employees[0]);
+		};
 	}
 
 	void Update()
@@ -180,6 +173,12 @@ public class Game : MonoBehaviour
 	private void DayPassed()
 	{
 		SetDateText();
+
+		if (Random.Range(0, 10) == 0) availableOrders.Add(Order.Genereate());
+		if (Random.Range(0, 10) == 0) jobApplications.Add(Employee.Generate());
+
+		AvailableOrdersPanel.i.UpdatePanel();
+		HirePanel.i.UpdatePanel();
 	}
 
 	private void YearPassed()
@@ -199,6 +198,8 @@ public class Game : MonoBehaviour
 	{
 		availableOrders.Remove(order);
 		currentOrders.Add(order);
+
+		AvailableOrdersPanel.i.UpdatePanel();
 	}
 
 	private void CompleteOrder(Order order)
@@ -208,10 +209,15 @@ public class Game : MonoBehaviour
 			Money -= 100;
 			currentOrders.Remove(order);
 
+			Reputation -= .1f;
+
 			return;
 		}
 
 		var timeFee = (order.deadline > time) ? 0f : (float)(order.deadline - time).TotalDays;
+
+		Reputation -= timeFee * 0.05f;
+		Reputation += .5f;
 
 		Money += order.Payment + (int)timeFee * -100;
 
@@ -303,7 +309,7 @@ public class Game : MonoBehaviour
 			var remainingPoint = order.orderDescription.workPoints - order.workedPoints;
 			var remainingHours = remainingPoint / workingSpeed;
 
-			text += Math.Floor(order.Completion * 100) + "% - " + order.orderDescription.name + 
+			text += Math.Floor(order.Completion * 100) + "% - " + order.orderDescription.name +
 				" - Time left: " + (remainingHours == float.PositiveInfinity ? "N/A" : Mathf.RoundToInt(remainingHours) + " hr");
 		}
 

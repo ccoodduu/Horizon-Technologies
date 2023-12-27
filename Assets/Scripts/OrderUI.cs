@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class OrderUISmall : MonoBehaviour
+public class OrderUI : MonoBehaviour
 {
 	public Order order { get; private set; }
 
@@ -43,6 +43,17 @@ public class OrderUISmall : MonoBehaviour
 		var color = Random.ColorHSV();
 		image.color = color;
 		imageLetterText.color = (color.r * 0.299f + color.g * 0.587f + color.b * 0.114f) > (186f / 255f) ? Color.black : Color.white;
+	}
+
+	public void Reject()
+	{
+		Game.i.availableOrders.Remove(order);
+		AvailableOrdersPanel.i.UpdatePanel();
+	}
+
+	public void Accept()
+	{
+		Game.i.TakeOrder(order);
 	}
 
 	public void OpenEmail()

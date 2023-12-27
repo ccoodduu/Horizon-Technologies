@@ -924,7 +924,7 @@ GameObject:
   - component: {fileID: 3703872557223549640}
   - component: {fileID: 5797383592977526838}
   m_Layer: 5
-  m_Name: Reject
+  m_Name: Accept
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1033,9 +1033,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: EmployeeUI, Assembly-CSharp
-        m_MethodName: Fire
+      - m_Target: {fileID: 4425036310628184299}
+        m_TargetAssemblyTypeName: OrderUI, Assembly-CSharp
+        m_MethodName: Accept
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1328,7 +1328,7 @@ GameObject:
   - component: {fileID: 4614222446430339705}
   - component: {fileID: 1307365864536337712}
   m_Layer: 5
-  m_Name: FireButton
+  m_Name: AcceptButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1437,9 +1437,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 3858837570228612228}
         m_TargetAssemblyTypeName: EmployeeUI, Assembly-CSharp
-        m_MethodName: Fire
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
