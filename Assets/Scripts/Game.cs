@@ -40,7 +40,7 @@ public class Game : MonoBehaviour
 			money = value;
 		}
 	}
-	private float reputation;
+	private float reputation = 1f;
 	public float Reputation { get => reputation; private set { reputation = Mathf.Clamp(value, 1f, 10f); } } // from 1-10
 
 	// [Header("Orders")]
@@ -69,6 +69,14 @@ public class Game : MonoBehaviour
 	public string companyName;
 
 	public static Game i;
+
+	[Header("Incoming Requests")]
+	private int nextOrderChance;
+	private int nextJobApplicationChance;
+
+	[SerializeField] private int jobApplicationFrequency;
+	[SerializeField] private int orderFrequency;
+
 	void Awake()
 	{
 		if (i == null) i = this;
@@ -86,7 +94,9 @@ public class Game : MonoBehaviour
 
 		jobApplications = new List<Employee>
 		{
-
+			Employee.Generate(),
+			Employee.Generate(),
+			Employee.Generate(),
 		};
 
 		BuyDeskFree();
@@ -94,12 +104,17 @@ public class Game : MonoBehaviour
 		availableOrders = new List<Order>
 		{
 			new Order(OrderList.list[0]),
+			Order.Generate(),
+			Order.Generate(),
 		};
 
 		currentOrders = new List<Order>
 		{
 
 		};
+
+		nextJobApplicationChance = jobApplicationFrequency;
+		nextOrderChance = orderFrequency;
 	}
 
 	void Update()
@@ -174,11 +189,22 @@ public class Game : MonoBehaviour
 	{
 		SetDateText();
 
-		if (Random.Range(0, 10) == 0) availableOrders.Add(Order.Genereate());
-		if (Random.Range(0, 10) == 0) jobApplications.Add(Employee.Generate());
+		if (Random.Range(0, nextOrderChance) == 0)
+		{
+			availableOrders.Add(Order.Generate());
+			nextOrderChance = orderFrequency;
+		}
+		if (Random.Range(0, nextJobApplicationChance) == 0)
+		{
+			jobApplications.Add(Employee.Generate());
+			nextJobApplicationChance = jobApplicationFrequency;
+		}
 
 		AvailableOrdersPanel.i.UpdatePanel();
 		HirePanel.i.UpdatePanel();
+
+		nextOrderChance--;
+		nextJobApplicationChance--;
 	}
 
 	private void YearPassed()

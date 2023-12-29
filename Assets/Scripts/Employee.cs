@@ -179,8 +179,8 @@ public static class NameGenerator
 	{
 		"Alice", "Bob", "Charlie", "David", "Emma", "Frank", "Grace", "Henry", "Ivy", "Jack",
 		"Leo", "Mia", "Noah", "Olivia", "Quinn", "Samuel", "Taylor",
-		"Ava", "Benjamin", "Chloe", "Daniel", "Eva", "Felix", "Georgia", "Harrison", "Isabel", "Jacob",
-		"Liam", "Madison", "Nathan", "Oscar", "Penelope", "Rebecca", "Sebastian", "Tara",
+		"Ava", "Benjamin", "Chloe", "Daniel", "Eva", "Felix", "Georgia", "Harrison", "Isabel", "Jacob", "Jonathan",
+		"Liam", "Madison", "Nathan", "Oscar", "Penelope", "Rebecca", "Sebastian", "Stephen", "Tara",
 		"Brandon", "Cassandra", "Derek", "Eliza", "Fiona", "Gavin", "Heather", "Isaiah", "Jasmine",
 		"Kevin", "Luna", "Mason", "Natalie", "Olive", "Patrick", "Quincy", "Riley", "Samantha", "Trevor",
 		"Violet", "Wyatt", "Zion"
@@ -188,7 +188,7 @@ public static class NameGenerator
 
 	public static string[] lastName = new string[]
 	{
-		"Anderson", "Brown", "Carter", "Davis", "Evans", "Fisher", "Garcia", "Hill", "Irwin", "Johnson",
+		"Anderson", "Andersen", "Brown", "Carter", "Davis", "Evans", "Fisher", "Garcia", "Hill", "Irwin", "Johnson",
 		"Keller", "Lopez", "Miller", "Nelson", "Owens", "Perez", "Quinn", "Reyes", "Smith", "Taylor",
 		"Underwood", "Vargas", "Williams", "Young", "Zimmerman", "Adams", "Baker", "Clark", "Diaz",
 		"Edwards", "Fletcher", "Gomez", "Hall", "Ingram", "Jenkins", "Kim", "Lambert", "Morgan", "Nguyen",

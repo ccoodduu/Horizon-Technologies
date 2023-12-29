@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 
 public class Order
 {
-	public float difficultyMultiplier;
+	public float difficultyMultiplier; // 1 - 5
 
 	public OrderDescription orderDescription;
 	public string ownerName;
@@ -19,7 +19,7 @@ public class Order
 
 	public float Completion => workedPoints / orderDescription.workPoints;
 
-	public static Order Genereate()
+	public static Order Generate()
 	{
 		var order = OrderList.list.Random();
 
@@ -30,6 +30,7 @@ public class Order
 
 	public Order(OrderDescription orderDescription, float difficultyMultiplier = 1.0f)
 	{
+		this.difficultyMultiplier = difficultyMultiplier;
 		this.orderDescription = orderDescription;
 		ownerName = NameGenerator.GenerateName();
 		deadline = Game.i.time + TimeSpan.FromHours(

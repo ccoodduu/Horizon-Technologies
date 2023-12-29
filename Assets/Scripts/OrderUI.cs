@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class OrderUI : MonoBehaviour
 {
@@ -65,6 +67,9 @@ public class OrderUI : MonoBehaviour
 			subject = order.orderDescription.name,
 			body = body,
 			sender = order.ownerName,
+		}, new EmailActionButton[] {
+			new EmailActionButton("Accept", () => Accept(), true),
+			new EmailActionButton("Reject", () => Reject(), true),
 		});
 	}
 }
