@@ -16,15 +16,15 @@ public class Game : MonoBehaviour
 	[SerializeField] private int endOfficeHour;
 	[SerializeField] private int speedChangeDelay;
 
-	private static DateTime foundingDate = new DateTime(2000, 1, 1, 8, 0, 0);
+	private static readonly DateTime foundingDate = new(2017, 3, 6, 8, 0, 0);
 
-	public DateTime time { get; private set; }
-	public bool IsOfficeTime => (time.Hour >= startOfficeHour && time.Hour < endOfficeHour);
-	public DateTime startOfficeTime => time.Subtract(time.TimeOfDay).Add(TimeSpan.FromHours(startOfficeHour));
-	public DateTime endOfficeTime => time.Subtract(time.TimeOfDay).Add(TimeSpan.FromHours(endOfficeHour));
-	public TimeSpan dailyOfficeTime => endOfficeTime - startOfficeTime;
+	public DateTime Time { get; private set; }
+	public bool IsOfficeTime => (Time.Hour >= startOfficeHour && Time.Hour < endOfficeHour);
+	public DateTime StartOfficeTime => Time.Subtract(Time.TimeOfDay).Add(TimeSpan.FromHours(startOfficeHour));
+	public DateTime EndOfficeTime => Time.Subtract(Time.TimeOfDay).Add(TimeSpan.FromHours(endOfficeHour));
+	public TimeSpan DailyOfficeTime => EndOfficeTime - StartOfficeTime;
 
-	public TimeSpan companyAge => time.Subtract(foundingDate);
+	public TimeSpan CompanyAge => Time.Subtract(foundingDate);
 
 	private bool skipToNextDay;
 
@@ -44,14 +44,14 @@ public class Game : MonoBehaviour
 	public float Reputation { get => reputation; private set { reputation = Mathf.Clamp(value, 1f, 10f); } } // from 1-10
 
 	// [Header("Orders")]
-	public List<Order> currentOrders { get; private set; }
-	public List<Order> availableOrders { get; private set; }
+	public List<Order> CurrentOrders { get; private set; }
+	public List<Order> AvailableOrders { get; private set; }
 
 	// [Header("Employees")]
-	public List<Employee> employees { get; private set; }
-	public List<Employee> jobApplications { get; private set; }
+	public List<Employee> Employees { get; private set; }
+	public List<Employee> JobApplications { get; private set; }
 
-	public int desksOwned { get; private set; }
+	public int DesksOwned { get; private set; }
 
 	[Header("Office")]
 	public OfficeManager officeManager;
@@ -83,16 +83,16 @@ public class Game : MonoBehaviour
 
 		DontDestroyOnLoad(this);
 
-		time = foundingDate;
-		desksOwned = 0;
+		Time = foundingDate;
+		DesksOwned = 0;
 		Money = 10000;
 
-		employees = new List<Employee>
+		Employees = new List<Employee>
 		{
 			Employee.You
 		};
 
-		jobApplications = new List<Employee>
+		JobApplications = new List<Employee>
 		{
 			Employee.Generate(),
 			Employee.Generate(),
@@ -101,14 +101,14 @@ public class Game : MonoBehaviour
 
 		BuyDeskFree();
 
-		availableOrders = new List<Order>
+		AvailableOrders = new List<Order>
 		{
 			new Order(OrderList.list[0]),
 			Order.Generate(),
 			Order.Generate(),
 		};
 
-		currentOrders = new List<Order>
+		CurrentOrders = new List<Order>
 		{
 
 		};
@@ -120,14 +120,14 @@ public class Game : MonoBehaviour
 	void Update()
 	{
 		// TIME
-		var previousTime = time;
+		var previousTime = Time;
 
 		var daySpeed = (endOfficeHour - startOfficeHour) * 60 * 60 / dayLengthInSeconds;
 		var nightSpeed = (24 - (endOfficeHour - startOfficeHour)) * 60 * 60 / nightLengthInSeconds;
 
 
 		// Update Time
-		var isDay = time > startOfficeTime.Subtract(TimeSpan.FromMinutes(speedChangeDelay)) && time < endOfficeTime.Add(TimeSpan.FromMinutes(speedChangeDelay));
+		var isDay = Time > StartOfficeTime.Subtract(TimeSpan.FromMinutes(speedChangeDelay)) && Time < EndOfficeTime.Add(TimeSpan.FromMinutes(speedChangeDelay));
 
 		float timeSpeed;
 		if (!isDay || skipToNextDay)
@@ -138,18 +138,18 @@ public class Game : MonoBehaviour
 		else
 			timeSpeed = daySpeed;
 
-		time = time.AddSeconds(Time.deltaTime * timeSpeed);
-		if (time.DayOfWeek == DayOfWeek.Saturday) time = time.AddDays(2);
+        Time = Time.AddSeconds(UnityEngine.Time.deltaTime * timeSpeed);
+		if (Time.DayOfWeek == DayOfWeek.Saturday) Time = Time.AddDays(2);
 
 		// Do stuff if time changes
 		SetTimeText();
 
-		if (previousTime.Day < time.Day) DayPassed();
-		if (previousTime.Month < time.Month) MonthPassed();
-		if (previousTime.Year < time.Year) YearPassed();
+		if (previousTime.Day < Time.Day) DayPassed();
+		if (previousTime.Month < Time.Month) MonthPassed();
+		if (previousTime.Year < Time.Year) YearPassed();
 
 		// Employees
-		foreach (var employee in employees)
+		foreach (var employee in Employees)
 		{
 			if (!employee.hasDesk)
 			{
@@ -168,9 +168,9 @@ public class Game : MonoBehaviour
 		// Orders
 		if (IsOfficeTime)
 		{
-			var workedTime = TimeSpan.FromSeconds(Time.deltaTime * timeSpeed);
+			var workedTime = TimeSpan.FromSeconds(UnityEngine.Time.deltaTime * timeSpeed);
 
-			foreach (var order in new List<Order>(currentOrders))
+			foreach (var order in new List<Order>(CurrentOrders))
 			{
 				var workedPoints = (float)workedTime.TotalHours * order.GetWorkingSpeed();
 				order.workedPoints += workedPoints;
@@ -191,12 +191,12 @@ public class Game : MonoBehaviour
 
 		if (Random.Range(0, nextOrderChance) == 0)
 		{
-			availableOrders.Add(Order.Generate());
+			AvailableOrders.Add(Order.Generate());
 			nextOrderChance = orderFrequency;
 		}
 		if (Random.Range(0, nextJobApplicationChance) == 0)
 		{
-			jobApplications.Add(Employee.Generate());
+			JobApplications.Add(Employee.Generate());
 			nextJobApplicationChance = jobApplicationFrequency;
 		}
 
@@ -214,7 +214,7 @@ public class Game : MonoBehaviour
 
 	private void MonthPassed()
 	{
-		foreach (var employee in employees)
+		foreach (var employee in Employees)
 		{
 			Money -= employee.salary;
 		}
@@ -222,8 +222,8 @@ public class Game : MonoBehaviour
 
 	public void TakeOrder(Order order)
 	{
-		availableOrders.Remove(order);
-		currentOrders.Add(order);
+		AvailableOrders.Remove(order);
+		CurrentOrders.Add(order);
 
 		AvailableOrdersPanel.i.UpdatePanel();
 	}
@@ -233,31 +233,31 @@ public class Game : MonoBehaviour
 		if (order.Completion < 1f)
 		{
 			Money -= 100;
-			currentOrders.Remove(order);
+			CurrentOrders.Remove(order);
 
 			Reputation -= .1f;
 
 			return;
 		}
 
-		var timeFee = (order.deadline > time) ? 0f : (float)(order.deadline - time).TotalDays;
+		var timeFee = (order.deadline > Time) ? 0f : (float)(order.deadline - Time).TotalDays;
 
 		Reputation -= timeFee * 0.05f;
 		Reputation += .5f;
 
 		Money += order.Payment + (int)timeFee * -100;
 
-		currentOrders.Remove(order);
+		CurrentOrders.Remove(order);
 	}
 
 	public void Hire(Employee employee)
 	{
-		if (desksOwned <= employees.Count) return;
+		if (DesksOwned <= Employees.Count) return;
 
-		jobApplications.Remove(employee);
+		JobApplications.Remove(employee);
 		HirePanel.i.UpdatePanel();
 
-		employees.Add(employee);
+		Employees.Add(employee);
 		EmployeesPanel.i.UpdatePanel();
 	}
 
@@ -265,7 +265,7 @@ public class Game : MonoBehaviour
 	{
 		employee.employeeRender.employee = null;
 
-		employees.Remove(employee);
+		Employees.Remove(employee);
 		EmployeesPanel.i.UpdatePanel();
 	}
 
@@ -273,16 +273,16 @@ public class Game : MonoBehaviour
 	{
 		var price = 100;
 		if (Money < price) return;
-		if (officeManager.desks.Length <= desksOwned) return;
+		if (officeManager.desks.Length <= DesksOwned) return;
 
 		Money -= price;
 		BuyDeskFree();
 	}
 	public void BuyDeskFree()
 	{
-		if (officeManager.desks.Length <= desksOwned) return;
+		if (officeManager.desks.Length <= DesksOwned) return;
 
-		desksOwned++;
+		DesksOwned++;
 
 		foreach (var desk in officeManager.desks)
 		{
@@ -301,7 +301,7 @@ public class Game : MonoBehaviour
 		 * <mspace=mspace=38>13:39</mspace>
 		 */
 
-		var text = "<mspace=mspace=38>" + time.ToString("HH:mm") + "</mspace>";
+		var text = "<mspace=mspace=38>" + Time.ToString("HH:mm") + "</mspace>";
 
 		timeText.text = text;
 	}
@@ -315,9 +315,9 @@ public class Game : MonoBehaviour
 		 */
 
 		var text = "";
-		text += time.ToString("MMMM d") + "<sup>th</sup>";
-		text += "\n" + time.Year;
-		text += "\n" + time.DayOfWeek.ToString();
+		text += Time.ToString("MMMM d") + "<sup>th</sup>";
+		text += "\n" + Time.Year;
+		text += "\n" + Time.DayOfWeek.ToString();
 
 		dateText.text = text;
 	}
@@ -326,7 +326,7 @@ public class Game : MonoBehaviour
 	{
 		var text = "";
 
-		foreach (var order in currentOrders)
+		foreach (var order in CurrentOrders)
 		{
 			if (text != "") text += "\n";
 

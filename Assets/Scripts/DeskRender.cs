@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class DeskRender : MonoBehaviour
 {
-    [SerializeField] MeshFilter tableMesh;
-	[SerializeField] MeshFilter chairMesh;
-	[SerializeField] MeshFilter wallMesh;
+    [SerializeField] private MeshFilter tableMesh;
+	[SerializeField] private MeshFilter chairMesh;
+	[SerializeField] private MeshFilter wallMesh;
 
 	void Start()
     {

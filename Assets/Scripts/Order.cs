@@ -33,8 +33,8 @@ public class Order
 		this.difficultyMultiplier = difficultyMultiplier;
 		this.orderDescription = orderDescription;
 		ownerName = NameGenerator.GenerateName();
-		deadline = Game.i.time + TimeSpan.FromHours(
-			(orderDescription.workPoints / Game.i.dailyOfficeTime.TotalHours * 24) / 5 * 7 / difficultyMultiplier + 24 * 5
+		deadline = Game.i.Time + TimeSpan.FromHours(
+			(orderDescription.workPoints / Game.i.DailyOfficeTime.TotalHours * 24) / 5 * 7 / difficultyMultiplier + 24 * 5
 		); // Five days after a single employee could have finished the job in normal conditions
 		deadline = deadline.Add(TimeSpan.FromDays(1) - deadline.TimeOfDay); // Round to midnight
 
@@ -50,7 +50,7 @@ public class Order
 
 		foreach (var employee in assignedEmployees)
 		{
-			if (!employee.canWork) continue;
+			if (!employee.CanWork) continue;
 			foreach (var skill in employee.skills) skillCounts[skill] += 1;
 		}
 

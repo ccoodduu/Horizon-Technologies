@@ -7,7 +7,7 @@ public class Sun : MonoBehaviour
 {
 	void Update()
 	{
-		var timeOfDay = Game.i.time.TimeOfDay / TimeSpan.FromDays(1);
+		var timeOfDay = Game.i.Time.TimeOfDay / TimeSpan.FromDays(1);
 		var angle = (float)timeOfDay * 360f - 90f;
 
 		transform.localRotation = Quaternion.Euler(angle, 0, 0);

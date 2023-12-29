@@ -18,7 +18,7 @@ public class LightSwitch : MonoBehaviour
 	{
 		var offset = TimeSpan.FromMinutes(minuteOffset);
 
-		var isOn = Game.i.time > Game.i.startOfficeTime.Subtract(offset) && Game.i.time < Game.i.endOfficeTime.Add(offset);
+		var isOn = Game.i.Time > Game.i.StartOfficeTime.Subtract(offset) && Game.i.Time < Game.i.EndOfficeTime.Add(offset);
 
 		if (wasOn && !isOn) TurnOf();
 		if (!wasOn && isOn) TurnOn();

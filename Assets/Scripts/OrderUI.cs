@@ -49,7 +49,7 @@ public class OrderUI : MonoBehaviour
 
 	public void Reject()
 	{
-		Game.i.availableOrders.Remove(order);
+		Game.i.AvailableOrders.Remove(order);
 		AvailableOrdersPanel.i.UpdatePanel();
 	}
 

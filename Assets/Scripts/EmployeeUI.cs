@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,7 +22,7 @@ public class EmployeeUI : MonoBehaviour
 	[SerializeField] private Button fireButton;
 
 	public Employee employee { get; private set; }
-
+	
 	private EmployeeUIType type;
 
 	public void SetParameters(Employee employee, EmployeeUIType type)
@@ -31,18 +32,10 @@ public class EmployeeUI : MonoBehaviour
 
 		// text
 		nameText.text = employee.name_;
-		ageText.text = employee.age + "y/o";
-		experienceText.text = "Exp: " + ((int)employee.experience.TotalDays / 365) + "y";
+		ageText.text = employee.Age + "y/o";
+		experienceText.text = "Exp: " + ((int)employee.Experience.TotalDays / 365) + "y";
 		salaryText.text = employee.salary + "$/m";
-
-		var skillsTextString = "";
-		foreach (var skill in employee.skills)
-		{
-			if (skillsTextString != "") skillsTextString += ", ";
-			skillsTextString += skill.ToDisplayText();
-		}
-
-		skillText.text = skillsTextString;
+		skillText.text = employee.skills.ToSkillString();
 
 		// image
 		employeeImage.SetImage(employee);

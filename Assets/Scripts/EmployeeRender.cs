@@ -36,7 +36,7 @@ public class EmployeeRender : MonoBehaviour
 		}
 
 
-		var isInOffice = Game.i.time > Game.i.startOfficeTime.Add(offset) && Game.i.time < Game.i.endOfficeTime.Add(offset);
+		var isInOffice = Game.i.Time > Game.i.StartOfficeTime.Add(offset) && Game.i.Time < Game.i.EndOfficeTime.Add(offset);
 		isInOffice = isInOffice && employee != null;
 
 		if (wasInOffice && !isInOffice) ExitOffice();

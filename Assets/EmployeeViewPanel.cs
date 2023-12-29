@@ -28,7 +28,7 @@ public class EmployeeViewPanel : MonoBehaviour
 	public void ChangeAssignedTask(int option)
     {
         if (option == 0) employee.SetAssignedOrder(null);
-        employee.SetAssignedOrder(Game.i.currentOrders[option - 1]);
+        employee.SetAssignedOrder(Game.i.CurrentOrders[option - 1]);
     }
 
 	public void Open(Employee employee)
@@ -40,23 +40,22 @@ public class EmployeeViewPanel : MonoBehaviour
         image.SetImage(employee);
 
         nameText.text = employee.name_;
-        aboutText.text = "Age: " + employee.age + " y/o";
+        aboutText.text = "Age: " + employee.Age + " y/o";
 
         var statsString = new StringBuilder();
 
         statsString.AppendLine("Salary: " + employee.salary + " $");
-		statsString.AppendLine("Experience: " + (int)employee.experience.TotalDays / 365 + " y");
+		statsString.AppendLine("Experience: " + (int)employee.Experience.TotalDays / 365 + " y");
 		statsString.AppendLine("Employed since: " + employee.employedSince.ToString("dd/MM/yyyy"));
 
-        var skillString = string.Join(", ", employee.skills.Select(s => s.ToDisplayText()));
-        statsString.AppendLine("Skills: " + skillString);
+        statsString.AppendLine("Skills: " + employee.skills.ToSkillString());
 
         statsText.text = statsString.ToString();
 
         assignedTaskDropdown.ClearOptions();
         assignedTaskDropdown.AddOptions(new List<string> { "None "});
-        assignedTaskDropdown.AddOptions(Game.i.currentOrders.Select(i => i.orderDescription.name).ToList());
+        assignedTaskDropdown.AddOptions(Game.i.CurrentOrders.Select(i => i.orderDescription.name).ToList());
 
-        assignedTaskDropdown.value = Game.i.currentOrders.IndexOf(employee.assignedOrder) + 1;
+        assignedTaskDropdown.value = Game.i.CurrentOrders.IndexOf(employee.assignedOrder) + 1;
 	}
 }

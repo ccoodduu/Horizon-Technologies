@@ -22,11 +22,11 @@ public class HirePanel : MonoBehaviour
 	{
 		var currentShown = GetComponentsInChildren<EmployeeUI>();
 
-		foreach (var e in Game.i.jobApplications) 
+		foreach (var e in Game.i.JobApplications) 
 			if (!currentShown.Any(a => a.employee == e)) SpawnEmployeeUI(e);
 
 		foreach (var a in currentShown)
-			if (!Game.i.jobApplications.Any(e => a.employee == e)) Destroy(a.gameObject);
+			if (!Game.i.JobApplications.Any(e => a.employee == e)) Destroy(a.gameObject);
 	}
 
 	private void SpawnEmployeeUI(Employee employee)

@@ -22,11 +22,11 @@ public class AvailableOrdersPanel : MonoBehaviour
 	{
 		var currentShown = GetComponentsInChildren<OrderUI>();
 
-		foreach (var o in Game.i.availableOrders)
+		foreach (var o in Game.i.AvailableOrders)
 			if (!currentShown.Any(a => a.order == o)) SpawnOrderUI(o);
 
 		foreach (var a in currentShown)
-			if (!Game.i.availableOrders.Any(o => a.order == o)) Destroy(a.gameObject);
+			if (!Game.i.AvailableOrders.Any(o => a.order == o)) Destroy(a.gameObject);
 	}
 
 	private void SpawnOrderUI(Order order)
