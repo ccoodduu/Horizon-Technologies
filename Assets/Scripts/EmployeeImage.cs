@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class EmployeeImage : MonoBehaviour
 {
-	[Header("Image")]
 	[SerializeField] private Image hairImage;
 	[SerializeField] private Image headImage;
 	[SerializeField] private Image shirtImage;

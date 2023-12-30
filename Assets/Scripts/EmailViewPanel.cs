@@ -19,8 +19,7 @@ public class EmailViewPanel : MonoBehaviour
 	[SerializeField] private TMP_Text bodyText;
 
 	[Header("Image")]
-	[SerializeField] private TMP_Text imageLetterText;
-	[SerializeField] private Image image;
+	[SerializeField] private EmailImage image;
 
 	[Header("Buttons")]
 	[SerializeField] private Button[] buttons;
@@ -38,6 +37,7 @@ public class EmailViewPanel : MonoBehaviour
 		contentSizeFitter = bodyText.GetComponent<ContentSizeFitter>();
 	}
 
+	// Hack for resizing the text
 	private bool skip = true;
 	void Update()
 	{
@@ -57,14 +57,12 @@ public class EmailViewPanel : MonoBehaviour
 
 		subjectText.text = email.subject;
 		bodyText.text = email.body;
+
+		// Hack for resizing the text
 		contentSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
 		// Image
-		imageLetterText.text = email.sender[0].ToString();
-		Random.InitState(email.sender.ToCharArray().Sum(i => (byte)i));
-		var color = Random.ColorHSV();
-		image.color = color;
-		imageLetterText.color = (color.r * 0.299f + color.g * 0.587f + color.b * 0.114f) > (186f / 255f) ? Color.black : Color.white;
+		image.SetImage(email.sender);
 
 		foreach (var button in this.buttons) button.gameObject.SetActive(false);
 

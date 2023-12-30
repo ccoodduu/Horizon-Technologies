@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-public class OrderUI : MonoBehaviour
+public class OrderRequestUI : MonoBehaviour
 {
 	public Order order { get; private set; }
 
@@ -18,8 +18,7 @@ public class OrderUI : MonoBehaviour
 	[SerializeField] private TMP_Text skillText;
 
 	[Header("Image")]
-	[SerializeField] private TMP_Text imageLetterText;
-	[SerializeField] private Image image;
+	[SerializeField] private EmailImage image;
 
 	public void SetParameters(Order order)
 	{
@@ -28,23 +27,12 @@ public class OrderUI : MonoBehaviour
 		// Text
 		titleText.text = order.orderDescription.name;
 		pointsText.text = order.orderDescription.workPoints + " wp";
-		paymentText.text = order.orderDescription.payment + " $";
+		paymentText.text = order.Payment + " $";
 
-		var skillsTextString = "";
-		foreach (var skill in order.orderDescription.skills)
-		{
-			if (skillsTextString != "") skillsTextString += ", ";
-			skillsTextString += skill.ToDisplayText();
-		}
-
-		skillText.text = skillsTextString;
+		skillText.text = order.orderDescription.skills.ToSkillString();
 
 		// Image
-		imageLetterText.text = order.ownerName[0].ToString();
-		Random.InitState(order.ownerName.ToCharArray().Sum(i => (byte)i));
-		var color = Random.ColorHSV();
-		image.color = color;
-		imageLetterText.color = (color.r * 0.299f + color.g * 0.587f + color.b * 0.114f) > (186f / 255f) ? Color.black : Color.white;
+		image.SetImage(order.ownerName);
 	}
 
 	public void Reject()

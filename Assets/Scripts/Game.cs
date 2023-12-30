@@ -115,6 +115,9 @@ public class Game : MonoBehaviour
 
 		nextJobApplicationChance = jobApplicationFrequency;
 		nextOrderChance = orderFrequency;
+
+		SetTimeText();
+		SetDateText();
 	}
 
 	void Update()
@@ -225,15 +228,18 @@ public class Game : MonoBehaviour
 		AvailableOrders.Remove(order);
 		CurrentOrders.Add(order);
 
+		CurrentOrdersPanel.i.UpdatePanel();
 		AvailableOrdersPanel.i.UpdatePanel();
 	}
 
-	private void CompleteOrder(Order order)
+	public void CompleteOrder(Order order)
 	{
+		CurrentOrders.Remove(order);
+		CurrentOrdersPanel.i.UpdatePanel();
+
 		if (order.Completion < 1f)
 		{
 			Money -= 100;
-			CurrentOrders.Remove(order);
 
 			Reputation -= .1f;
 
@@ -242,12 +248,10 @@ public class Game : MonoBehaviour
 
 		var timeFee = (order.deadline > Time) ? 0f : (float)(order.deadline - Time).TotalDays;
 
-		Reputation -= timeFee * 0.05f;
-		Reputation += .5f;
-
 		Money += order.Payment + (int)timeFee * -100;
 
-		CurrentOrders.Remove(order);
+		Reputation -= timeFee * 0.05f;
+		Reputation += .5f;
 	}
 
 	public void Hire(Employee employee)

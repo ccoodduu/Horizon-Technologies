@@ -16,7 +16,6 @@ public class Order
 	public float workedPoints;
 
 	public int Payment => Mathf.RoundToInt(orderDescription.payment * ((difficultyMultiplier - 1) * 2 + 1));
-
 	public float Completion => workedPoints / orderDescription.workPoints;
 
 	public static Order Generate()
@@ -26,6 +25,39 @@ public class Order
 		var difficulty = Random.Range(1f, Game.i.Reputation / 2);
 
 		return new Order(order, difficulty);
+	}
+
+	public DateTime EstimatedDone()
+	{
+		var workingSpeed = GetWorkingSpeed();
+
+		if (workingSpeed == 0) return DateTime.MaxValue;
+
+		var remainingPoint = orderDescription.workPoints - workedPoints;
+		var remainingHours = remainingPoint / workingSpeed;
+
+		var hoursLeft = remainingHours;
+		var date = Game.i.Time;
+
+		var hoursLeftToday = (float)Game.i.EndOfficeTime.Subtract(date).TotalHours;
+
+		hoursLeft -= Math.Clamp(hoursLeftToday, 0f, (float)Game.i.DailyOfficeTime.TotalHours);
+
+		date = date.AddHours(hoursLeftToday);
+		while (hoursLeft > 0)
+		{
+			if (date.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
+				date = date.AddDays(2);
+
+			date = date.AddDays(1);
+
+			hoursLeft -= (float)Game.i.DailyOfficeTime.TotalHours;
+		}
+
+		if (date.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
+			date = date.AddDays(2);
+
+		return date;
 	}
 
 	public Order(OrderDescription orderDescription, float difficultyMultiplier = 1.0f)
@@ -69,12 +101,7 @@ public class Order
 
 	public string FormatAsEmail()
 	{
-		var skillsTextString = "";
-		foreach (var skill in orderDescription.skills)
-		{
-			if (skillsTextString != "") skillsTextString += ", ";
-			skillsTextString += skill.ToDisplayText();
-		}
+		var skillsTextString = orderDescription.skills.ToSkillString();
 
 		var stringBuilder = new StringBuilder();
 
@@ -83,7 +110,7 @@ public class Order
 		stringBuilder.Replace("[Your Company]", Game.i.companyName);
 
 		stringBuilder.AppendLine("");
-		stringBuilder.AppendLine("Payment: " + orderDescription.payment + " $");
+		stringBuilder.AppendLine("Payment: " + Payment + " $");
 		stringBuilder.AppendLine("Required skills: " + skillsTextString);
 		stringBuilder.AppendLine("Work points: " + orderDescription.workPoints + " wp");
 		stringBuilder.AppendLine("Deadline: " + deadline.ToString("dd/MM/yyyy"));
@@ -124,10 +151,46 @@ public enum Skill
 
 public static class OrderList
 {
-	public static Dictionary<int, int> frequencies = new Dictionary<int, int>();
+	public static Dictionary<int, int> frequencies = new();
 
 	public static OrderDescription[] list = new OrderDescription[]
 	{
+		new OrderDescription
+		{
+			name = "Social Media Feed Widget",
+			shortDescription = "Design and implement a widget for displaying a social media feed on external websites.",
+			longDescription = "Subject: Social Media Feed Widget Development\n\nDear [Your Company],\n\nWe have a task that requires your expertise in designing and implementing a widget for displaying a social media feed on external websites. Your skills in JavaScript, CSS, and HTML are crucial for the success of this project. We look forward to your proposal and discussing the project further.\n\nBest regards,\n[Order Requester's Name]",
+			skills = new Skill[] { Skill.JavaScript, Skill.CSS, Skill.HTML },
+			workPoints = 80,
+			payment = 5000
+		},
+		new OrderDescription
+		{
+			name = "Simple E-commerce Module",
+			shortDescription = "Add a basic e-commerce module to an existing website for product listing and checkout.",
+			longDescription = "Subject: E-commerce Module Development\n\nDear [Your Company],\n\nWe are reaching out to request your expertise in adding a basic e-commerce module to an existing website. The module should handle product listing and checkout. Your skills in PHP, SQL, HTML, and CSS are crucial for the success of this project. We look forward to your proposal and discussing the project further.\n\nBest regards,\n[Order Requester's Name]",
+			skills = new Skill[] { Skill.PHP, Skill.SQL, Skill.HTML, Skill.CSS },
+			workPoints = 150,
+			payment = 6000
+		},
+		new OrderDescription
+		{
+			name = "Contact Form Integration",
+			shortDescription = "Integrate a contact form into a website to enable user inquiries and feedback.",
+			longDescription = "Subject: Contact Form Integration\n\nDear [Your Company],\n\nWe have a task that requires your expertise in integrating a contact form into a website. The form should enable user inquiries and feedback. Your skills in PHP, HTML, and CSS are crucial for the success of this project. We look forward to your proposal and discussing the project further.\n\nBest regards,\n[Order Requester's Name]",
+			skills = new Skill[] { Skill.PHP, Skill.HTML, Skill.CSS },
+			workPoints = 40,
+			payment = 2000
+		},
+		new OrderDescription
+		{
+			name = "Weather App",
+			shortDescription = "Build a simple weather application displaying current weather conditions and forecasts.",
+			longDescription = "Subject: Weather App Development\n\nDear [Your Company],\n\nWe are seeking a skilled developer to build a simple weather application. The app should display current weather conditions and forecasts. Your skills in JavaScript, HTML, and CSS are crucial for the success of this project. We look forward to your proposal and discussing the project further.\n\nBest regards,\n[Order Requester's Name]",
+			skills = new Skill[] { Skill.JavaScript, Skill.HTML, Skill.CSS },
+			workPoints = 100,
+			payment = 4000
+		},
 		new OrderDescription
 		{
 			name = "Enterprise Resource Planning (ERP) System",
@@ -279,7 +342,7 @@ public static class OrderList
 			longDescription = "Subject: Request for Real-time Collaboration Platform Development\n\nDear [Your Company],\n\nWe have an exciting project that requires your expertise in developing a real-time collaboration platform. The platform should empower users to seamlessly collaborate on documents, projects, and tasks. Your proficiency in Java, JavaScript, React, Node.js, and CSS is essential for the success of this project. We eagerly await your proposal and look forward to discussing the project further.\n\nBest regards,\n[Order Requester's Name]",
 			skills = new Skill[] { Skill.Java, Skill.JavaScript, Skill.React, Skill.Nodejs, Skill.CSS },
 			workPoints = 400,
-			payment = Random.Range(7000, 9000)
+			payment = 9000
 		},
 		new OrderDescription
 		{
@@ -288,7 +351,7 @@ public static class OrderList
 			longDescription = "Subject: Request for AI-Powered Chatbot Development\n\nDear [Your Company],\n\nWe have an intriguing project that requires your expertise in developing an AI-powered chatbot. The chatbot aims to enhance our customer support services by providing automated and intelligent responses. Your skills in Python, JavaScript, and Node.js are crucial for this task. We anticipate your proposal and are excited to delve into further discussions.\n\nBest regards,\n[Order Requester's Name]",
 			skills = new Skill[] { Skill.Python, Skill.JavaScript, Skill.Nodejs },
 			workPoints = 240,
-			payment = Random.Range(5000, 7000)
+			payment = 6500
 		},
 		new OrderDescription
 		{
@@ -297,7 +360,7 @@ public static class OrderList
 			longDescription = "Subject: Request for Supply Chain Management System Development\n\nDear [Your Company],\n\nWe have an exciting project that requires a skilled developer to design and implement a cutting-edge supply chain management system. Your expertise in C#, SQL, and .NET will play a crucial role in optimizing logistics, inventory, and order fulfillment processes. With a substantial project scope of 500 work points and a payment ranging from $11000 to $13000, we eagerly await your proposal and look forward to discussing the project further.\n\nBest regards,\n[Order Requester's Name]",
 			skills = new Skill[] { Skill.CSharp, Skill.SQL, Skill.dotNET },
 			workPoints = 500,
-			payment = Random.Range(11000, 13000)
+			payment = 12000
 		},
 		new OrderDescription
 		{
@@ -342,42 +405,6 @@ public static class OrderList
 			longDescription = "Subject: Portfolio Website Development\n\nDear [Your Company],\n\nWe are seeking a talented developer to redesign and develop a sleek and modern portfolio website. The website should effectively showcase skills and projects. Your expertise in HTML, CSS, and JavaScript is crucial for the success of this project. We look forward to your proposal and discussing the project further.\n\nBest regards,\n[Order Requester's Name]",
 			skills = new Skill[] { Skill.HTML, Skill.CSS, Skill.JavaScript },
 			workPoints = 60,
-			payment = 4000
-		},
-		new OrderDescription
-		{
-			name = "Social Media Feed Widget",
-			shortDescription = "Design and implement a widget for displaying a social media feed on external websites.",
-			longDescription = "Subject: Social Media Feed Widget Development\n\nDear [Your Company],\n\nWe have a task that requires your expertise in designing and implementing a widget for displaying a social media feed on external websites. Your skills in JavaScript, CSS, and HTML are crucial for the success of this project. We look forward to your proposal and discussing the project further.\n\nBest regards,\n[Order Requester's Name]",
-			skills = new Skill[] { Skill.JavaScript, Skill.CSS, Skill.HTML },
-			workPoints = 80,
-			payment = 5000
-		},
-		new OrderDescription
-		{
-			name = "Simple E-commerce Module",
-			shortDescription = "Add a basic e-commerce module to an existing website for product listing and checkout.",
-			longDescription = "Subject: E-commerce Module Development\n\nDear [Your Company],\n\nWe are reaching out to request your expertise in adding a basic e-commerce module to an existing website. The module should handle product listing and checkout. Your skills in PHP, SQL, HTML, and CSS are crucial for the success of this project. We look forward to your proposal and discussing the project further.\n\nBest regards,\n[Order Requester's Name]",
-			skills = new Skill[] { Skill.PHP, Skill.SQL, Skill.HTML, Skill.CSS },
-			workPoints = 150,
-			payment = 6000
-		},
-		new OrderDescription
-		{
-			name = "Contact Form Integration",
-			shortDescription = "Integrate a contact form into a website to enable user inquiries and feedback.",
-			longDescription = "Subject: Contact Form Integration\n\nDear [Your Company],\n\nWe have a task that requires your expertise in integrating a contact form into a website. The form should enable user inquiries and feedback. Your skills in PHP, HTML, and CSS are crucial for the success of this project. We look forward to your proposal and discussing the project further.\n\nBest regards,\n[Order Requester's Name]",
-			skills = new Skill[] { Skill.PHP, Skill.HTML, Skill.CSS },
-			workPoints = 40,
-			payment = 2000
-		},
-		new OrderDescription
-		{
-			name = "Weather App",
-			shortDescription = "Build a simple weather application displaying current weather conditions and forecasts.",
-			longDescription = "Subject: Weather App Development\n\nDear [Your Company],\n\nWe are seeking a skilled developer to build a simple weather application. The app should display current weather conditions and forecasts. Your skills in JavaScript, HTML, and CSS are crucial for the success of this project. We look forward to your proposal and discussing the project further.\n\nBest regards,\n[Order Requester's Name]",
-			skills = new Skill[] { Skill.JavaScript, Skill.HTML, Skill.CSS },
-			workPoints = 100,
 			payment = 4000
 		},
 		new OrderDescription

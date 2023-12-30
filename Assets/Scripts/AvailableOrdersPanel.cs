@@ -7,8 +7,8 @@ public class AvailableOrdersPanel : MonoBehaviour
 {
 	public static AvailableOrdersPanel i;
 
-    [SerializeField] private GameObject OrderUIPrefab;
-    [SerializeField] private GameObject OrderUIContainer;
+    [SerializeField] private GameObject orderRequestUIPrefab;
+    [SerializeField] private GameObject orderUIContainer;
 
 	void Start()
 	{
@@ -20,7 +20,7 @@ public class AvailableOrdersPanel : MonoBehaviour
 
 	public void UpdatePanel()
 	{
-		var currentShown = GetComponentsInChildren<OrderUI>();
+		var currentShown = GetComponentsInChildren<OrderRequestUI>();
 
 		foreach (var o in Game.i.AvailableOrders)
 			if (!currentShown.Any(a => a.order == o)) SpawnOrderUI(o);
@@ -31,9 +31,9 @@ public class AvailableOrdersPanel : MonoBehaviour
 
 	private void SpawnOrderUI(Order order)
 	{
-		var gameObject = Instantiate(OrderUIPrefab, OrderUIContainer.transform);
+		var gameObject = Instantiate(orderRequestUIPrefab, orderUIContainer.transform);
 
-		var oUI = gameObject.GetComponent<OrderUI>();
+		var oUI = gameObject.GetComponent<OrderRequestUI>();
 		oUI.SetParameters(order);
 	}
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 public class CurrentOrdersPanel : MonoBehaviour
 {
@@ -18,22 +19,30 @@ public class CurrentOrdersPanel : MonoBehaviour
 		gameObject.SetActive(false);
 	}
 
+	void Update()
+	{
+		var currentShown = GetComponentsInChildren<CurrentOrderUI>();
+
+		foreach (var oUI in currentShown)
+			oUI.UpdateUI();
+	}
+
 	public void UpdatePanel()
 	{
-		var currentShown = GetComponentsInChildren<OrderUI>();
+		var currentShown = GetComponentsInChildren<CurrentOrderUI>();
 
-		foreach (var o in Game.i.AvailableOrders)
+		foreach (var o in Game.i.CurrentOrders)
 			if (!currentShown.Any(a => a.order == o)) SpawnOrderUI(o);
 
 		foreach (var a in currentShown)
-			if (!Game.i.AvailableOrders.Any(o => a.order == o)) Destroy(a.gameObject);
+			if (!Game.i.CurrentOrders.Any(o => a.order == o)) Destroy(a.gameObject);
 	}
 
 	private void SpawnOrderUI(Order order)
 	{
 		var gameObject = Instantiate(OrderUIPrefab, OrderUIContainer.transform);
 
-		var oUI = gameObject.GetComponent<OrderUI>();
+		var oUI = gameObject.GetComponent<CurrentOrderUI>();
 		oUI.SetParameters(order);
 	}
 }
