@@ -41,7 +41,15 @@ public class Game : MonoBehaviour
 		}
 	}
 	private float reputation = 1f;
-	public float Reputation { get => reputation; private set { reputation = Mathf.Clamp(value, 1f, 10f); } } // from 1-10
+	public float Reputation
+	{
+		get => reputation;
+		private set
+		{
+			reputation = Mathf.Clamp(value, 1f, 10f); // from 1 - 10
+			ReputationStars.i.UpdateStars();
+		}
+	}
 
 	// [Header("Orders")]
 	public List<Order> CurrentOrders { get; private set; }
@@ -105,12 +113,10 @@ public class Game : MonoBehaviour
 			Employee.Generate(),
 		};
 
-		AvailableOrders = new List<Order>
-		{
-			new Order(OrderList.list[0]),
-			Order.Generate(),
-			Order.Generate(),
-		};
+		AvailableOrders = new() { new Order(OrderList.list[0]) };
+
+		AvailableOrders.Add(Order.Generate());
+		AvailableOrders.Add(Order.Generate());
 
 		CurrentOrders = new List<Order>
 		{
@@ -145,7 +151,7 @@ public class Game : MonoBehaviour
 		else
 			timeSpeed = daySpeed;
 
-        Time = Time.AddSeconds(UnityEngine.Time.deltaTime * timeSpeed);
+		Time = Time.AddSeconds(UnityEngine.Time.deltaTime * timeSpeed);
 		if (Time.DayOfWeek == DayOfWeek.Saturday) Time = Time.AddDays(2);
 
 		// Do stuff if time changes
@@ -219,9 +225,9 @@ public class Game : MonoBehaviour
 			employee.requestedSalary += 1;
 		}
 
-		foreach (var employee in new List<Employee>(Employees)) 
-		{ 
-			if (employee.Happiness < Multipliers.i.minHappiness) 
+		foreach (var employee in new List<Employee>(Employees))
+		{
+			if (employee.Happiness < Multipliers.i.minHappiness)
 			{
 				Fire(employee);
 				reputation -= .5f;

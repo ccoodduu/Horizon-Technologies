@@ -48,6 +48,8 @@ public class EmployeeViewPanel : MonoBehaviour
 		statsString.AppendLine("Experience: " + (int)employee.Experience.TotalDays / 365 + " y");
 		statsString.AppendLine("Employed since: " + employee.employedSince.ToString("dd/MM/yyyy"));
 
+        statsString.AppendLine("Happiness: " + Mathf.RoundToInt(employee.Happiness * 100) + "%");
+
         statsString.AppendLine("Skills: " + employee.skills.ToSkillString());
 
         statsText.text = statsString.ToString();

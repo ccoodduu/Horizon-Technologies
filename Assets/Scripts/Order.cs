@@ -16,14 +16,14 @@ public class Order
 	public List<Employee> assignedEmployees;
 	public float workedPoints;
 
-	public int Payment => Mathf.RoundToInt(orderDescription.payment * ((difficultyMultiplier - 1) * 2 + 1));
+	public int Payment => Mathf.RoundToInt(orderDescription.payment * difficultyMultiplier);
 	public float Completion => workedPoints / orderDescription.workPoints;
 
 	public static Order Generate()
 	{
-		var order = OrderList.list.Random();
+		var order = OrderList.list.Where(o => !Game.i.AvailableOrders.Any(item => item.orderDescription.name == o.name)).Random();
 
-		var difficulty = Random.Range(1f, Game.i.Reputation / 2);
+		var difficulty = Mathf.Clamp(Random.Range(1f, Game.i.Reputation / 2), 1f, 5f);
 
 		return new Order(order, difficulty);
 	}
