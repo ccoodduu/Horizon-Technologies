@@ -80,17 +80,23 @@ public class Game : MonoBehaviour
 	void Awake()
 	{
 		if (i == null) i = this;
-
 		DontDestroyOnLoad(this);
+
+		SkillInfo.Init();
 
 		Time = foundingDate;
 		DesksOwned = 0;
 		Money = 10000;
 
-		Employees = new List<Employee>
-		{
-			Employee.You
-		};
+		BuyDeskFree();
+
+		Employees = new();
+
+		var you = Employee.You;
+		you.salary = you.requestedSalary;
+		you.employedSince = Time;
+
+		Employees.Add(you);
 
 		JobApplications = new List<Employee>
 		{
@@ -98,8 +104,6 @@ public class Game : MonoBehaviour
 			Employee.Generate(),
 			Employee.Generate(),
 		};
-
-		BuyDeskFree();
 
 		AvailableOrders = new List<Order>
 		{
@@ -208,6 +212,21 @@ public class Game : MonoBehaviour
 
 		nextOrderChance--;
 		nextJobApplicationChance--;
+
+		foreach (var employee in Employees)
+		{
+			Money -= employee.salary / 22;
+			employee.requestedSalary += 1;
+		}
+
+		foreach (var employee in new List<Employee>(Employees)) 
+		{ 
+			if (employee.Happiness < Multipliers.i.minHappiness) 
+			{
+				Fire(employee);
+				reputation -= .5f;
+			}
+		}
 	}
 
 	private void YearPassed()
@@ -217,10 +236,7 @@ public class Game : MonoBehaviour
 
 	private void MonthPassed()
 	{
-		foreach (var employee in Employees)
-		{
-			Money -= employee.salary;
-		}
+
 	}
 
 	public void TakeOrder(Order order)
@@ -258,6 +274,9 @@ public class Game : MonoBehaviour
 	{
 		if (DesksOwned <= Employees.Count) return;
 
+		employee.salary = employee.requestedSalary;
+		employee.employedSince = Time;
+
 		JobApplications.Remove(employee);
 		HirePanel.i.UpdatePanel();
 
@@ -268,6 +287,7 @@ public class Game : MonoBehaviour
 	public void Fire(Employee employee)
 	{
 		employee.employeeRender.employee = null;
+		employee.assignedOrder?.assignedEmployees.Remove(employee);
 
 		Employees.Remove(employee);
 		EmployeesPanel.i.UpdatePanel();

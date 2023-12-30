@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -96,7 +97,7 @@ public class Order
 			speedMultiplier *= Mathf.Pow(1.2f, count - 1);
 		}
 
-		return speedMultiplier * assignedEmployees.Count;
+		return speedMultiplier * assignedEmployees.Sum(e => e.WorkingSpeed);
 	}
 
 	public string FormatAsEmail()
@@ -149,6 +150,59 @@ public enum Skill
 	Docker,
 }
 
+public class SkillInfo
+{
+	public Skill skill;
+	public float demand; // amount of orders with skill
+	public string[] categories;
+	public float supply; // chance of workers getting skill
+
+	public float Value => demand / supply;
+
+	public static Dictionary<Skill, SkillInfo> infos = new();
+
+	public static void Init()
+	{
+		infos.Clear();
+		foreach (var skill in (Skill[])Enum.GetValues(typeof(Skill)))
+		{
+			infos.Add(skill, new SkillInfo(skill));
+		}
+	}
+
+	public SkillInfo(Skill skill)
+	{
+		this.skill = skill;
+
+		categories = skillCategories[skill];
+
+		var averagePaymentPerWP = (float)OrderList.list.Average(l => l.payment / l.workPoints);
+		demand = OrderList.list.Where(l => l.skills.Contains(skill)).Sum(l => (l.payment / l.workPoints) / averagePaymentPerWP);
+
+		supply = categories.Sum(c => skillCategories.Values.Count(v => v.Contains(c)));
+	}
+
+	public static Dictionary<Skill, string[]> skillCategories = new()
+	{
+		{ Skill.CSharp, new string[] { "Programming", "DotNet", "Backend", "Object-Oriented" } },
+		{ Skill.CPP, new string[] { "Programming", "Backend", "Object-Oriented" } },
+		{ Skill.C, new string[] { "Programming", "Backend" } },
+		{ Skill.Java, new string[] { "Programming", "Backend", "Object-Oriented" } },
+		{ Skill.JavaScript, new string[] { "Programming", "Frontend", "Web Development" } },
+		{ Skill.HTML, new string[] { "Web Development", "Frontend" } },
+		{ Skill.CSS, new string[] { "Web Development", "Frontend" } },
+		{ Skill.Python, new string[] { "Programming", "Backend", "Scripting" } },
+		{ Skill.PHP, new string[] { "Web Development", "Backend", "Scripting" } },
+		{ Skill.SQL, new string[] { "Database", "Backend" } },
+		{ Skill.dotNET, new string[] { "DotNet", "Backend" } },
+		{ Skill.React, new string[] { "Web Development", "Frontend", "JavaScript" } },
+		{ Skill.Angular, new string[] { "Web Development", "Frontend", "JavaScript" } },
+		{ Skill.Nodejs, new string[] { "Web Development", "Backend", "JavaScript" } },
+		{ Skill.DevOps, new string[] { "DevOps", "Infrastructure" } },
+		{ Skill.Docker, new string[] { "DevOps", "Containers" } },
+	};
+}
+
 public static class OrderList
 {
 	public static Dictionary<int, int> frequencies = new();
@@ -193,7 +247,7 @@ public static class OrderList
 		},
 		new OrderDescription
 		{
-			name = "Enterprise Resource Planning (ERP) System",
+			name = "ERP System",
 			shortDescription = "Develop a user-friendly ERP system integrating HR, finance, and inventory for streamlined internal processes.",
 			longDescription = "Subject: Request for ERP System Development\n\nDear [Your Company],\n\nWe are in need of a skilled development team to create a user-friendly Enterprise Resource Planning (ERP) system. The system should seamlessly integrate Human Resources (HR), finance, and inventory modules to enhance our internal processes. The goal is to streamline operations, improve efficiency, and ensure a smooth workflow across departments. We look forward to your proposal and estimated timeline for this project.\n\nBest regards,\n[Order Requester's Name]",
 			skills = new Skill[] { Skill.CSharp, Skill.SQL, Skill.dotNET, Skill.JavaScript },
@@ -202,7 +256,7 @@ public static class OrderList
 		},
 		new OrderDescription
 		{
-			name = "Customer Relationship Management (CRM) Software",
+			name = "CRM Software",
 			shortDescription = "Build a customizable CRM system to track interactions, manage leads, and provide insightful analytics for enhanced sales processes.",
 			longDescription = "Subject: Request for CRM Software Development\n\nDear [Your Company],\n\nWe are seeking expertise to build a customizable Customer Relationship Management (CRM) system. The system should be capable of efficiently tracking customer interactions, managing leads, and providing insightful analytics to enhance our sales processes. Customization options for specific business needs are a priority. We kindly request your team's proposal and timeline estimate for this project.\n\nBest regards,\n[Order Requester's Name]",
 			skills = new Skill[] { Skill.Java, Skill.SQL, Skill.HTML, Skill.CSS },
@@ -271,15 +325,6 @@ public static class OrderList
 			skills = new Skill[] { Skill.CSharp, Skill.SQL, Skill.dotNET },
 			workPoints = 300,
 			payment = 8000
-		},
-		new OrderDescription
-		{
-			name = "Task Management App",
-			shortDescription = "Build a task management application with features for creating, assigning, and tracking tasks within a team.",
-			longDescription = "Subject: Request for Task Management App Development\n\nDear [Your Company],\n\nWe are interested in developing a task management application with features for creating, assigning, and tracking tasks within a team. The application should enhance collaboration and productivity. We eagerly await your proposal and look forward to discussing the project in more detail.\n\nBest regards,\n[Order Requester's Name]",
-			skills = new Skill[] { Skill.React, Skill.Nodejs, Skill.JavaScript, Skill.HTML, Skill.CSS },
-			workPoints = 180,
-			payment = 6000
 		},
 		new OrderDescription
 		{
@@ -405,7 +450,7 @@ public static class OrderList
 			longDescription = "Subject: Portfolio Website Development\n\nDear [Your Company],\n\nWe are seeking a talented developer to redesign and develop a sleek and modern portfolio website. The website should effectively showcase skills and projects. Your expertise in HTML, CSS, and JavaScript is crucial for the success of this project. We look forward to your proposal and discussing the project further.\n\nBest regards,\n[Order Requester's Name]",
 			skills = new Skill[] { Skill.HTML, Skill.CSS, Skill.JavaScript },
 			workPoints = 60,
-			payment = 4000
+			payment = 3000
 		},
 		new OrderDescription
 		{
@@ -418,7 +463,7 @@ public static class OrderList
 		},
 		new OrderDescription
 		{
-			name = "Basic Content Management System (CMS)",
+			name = "Basic CMS",
 			shortDescription = "Build a lightweight CMS for managing and updating website content.",
 			longDescription = "Subject: Basic CMS Development\n\nDear [Your Company],\n\nWe are reaching out to request your expertise in building a lightweight Content Management System (CMS). The CMS should be capable of managing and updating website content. Your skills in PHP, SQL, HTML, and CSS are crucial for the success of this project. We look forward to your proposal and discussing the project further.\n\nBest regards,\n[Order Requester's Name]",
 			skills = new Skill[] { Skill.PHP, Skill.SQL, Skill.HTML, Skill.CSS },

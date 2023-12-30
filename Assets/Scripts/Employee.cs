@@ -8,6 +8,7 @@ using Random = UnityEngine.Random;
 
 public class Employee
 {
+	public int requestedSalary;
 	public int salary;
 	public string name_;
 	private DateTime birthday;
@@ -27,6 +28,48 @@ public class Employee
 	public bool CanWork => hasDesk;
 
 	public static Employee You => new("You", 0, 22, TimeSpan.Zero, new Skill[] { Skill.HTML, Skill.JavaScript, Skill.CSS });
+
+	// 0.0 - 1.0
+	public float Happiness
+	{
+		get
+		{
+			if (name_ == "You") return 1;
+
+			var happiness = Multipliers.i.baseHappiness;
+
+			happiness *= ((float)salary / (float)requestedSalary) * Multipliers.i.saleryHappinessMultiplier;
+
+			if (assignedOrder != null)
+				happiness *= Mathf.Pow(Multipliers.i.skillHappinessMultiplier, assignedOrder.orderDescription.skills.Select(s => skills.Contains(s)).Count() - 1);
+
+			return Mathf.Clamp01(happiness);
+		}
+	}
+	
+	public float WorkingSpeed
+	{
+		get
+		{
+			var speed = Multipliers.i.baseSpeed;
+
+			speed *= (Happiness + (1 - Multipliers.i.baseHappiness)) * Multipliers.i.happinessSpeedMultiplier;
+
+			speed *= Mathf.Pow(Multipliers.i.experienceSpeedMultiplier, ((float)Experience.TotalDays / 365f));
+			speed *= Mathf.Pow(Multipliers.i.employmentTimeSpeedMultiplier, ((float)Game.i.Time.Subtract(employedSince).TotalDays / 365f));
+
+			speed *= Mathf.Pow(Multipliers.i.ageSpeedMultiplier, (Age - 30));
+
+			return speed;
+		}
+	}
+
+	public void SetAssignedOrder(Order order)
+	{
+		assignedOrder?.assignedEmployees.Remove(this);
+		order?.assignedEmployees.Add(this);
+		assignedOrder = order;
+	}
 
 	public static Employee Generate()
 	{
@@ -59,97 +102,60 @@ public class Employee
 	private static Skill[] GenerateRandomSkills(float overallFactor)
 	{
 		var allSkills = new List<Skill>((Skill[])Enum.GetValues(typeof(Skill)));
-		var randomSkills = new List<Skill>();
 
 		// Adjust the number of skills based on the overallFactor
 		int numSkills = Mathf.RoundToInt(Random.Range(1f, 3f) * overallFactor);
 
-		// Define skill categories (you can customize this based on your skills)
-		var skillCategories = new Dictionary<Skill, string[]>()
-		{
-			{ Skill.CSharp, new string[] { "Programming", "DotNet", "Backend", "Object-Oriented" } },
-			{ Skill.CPP, new string[] { "Programming", "Backend", "Object-Oriented" } },
-			{ Skill.C, new string[] { "Programming", "Backend" } },
-			{ Skill.Java, new string[] { "Programming", "Backend", "Object-Oriented" } },
-			{ Skill.JavaScript, new string[] { "Programming", "Frontend", "Web Development" } },
-			{ Skill.HTML, new string[] { "Web Development", "Frontend" } },
-			{ Skill.CSS, new string[] { "Web Development", "Frontend" } },
-			{ Skill.Python, new string[] { "Programming", "Backend", "Scripting" } },
-			{ Skill.PHP, new string[] { "Web Development", "Backend", "Scripting" } },
-			{ Skill.SQL, new string[] { "Database", "Backend" } },
-			{ Skill.dotNET, new string[] { "DotNet", "Backend" } },
-			{ Skill.React, new string[] { "Web Development", "Frontend", "JavaScript" } },
-			{ Skill.Angular, new string[] { "Web Development", "Frontend", "JavaScript" } },
-			{ Skill.Nodejs, new string[] { "Web Development", "Backend", "JavaScript" } },
-			{ Skill.DevOps, new string[] { "DevOps", "Infrastructure" } },
-			{ Skill.Docker, new string[] { "DevOps", "Containers" } },
-		};
-
 		var selectedSkills = new HashSet<Skill>();
 
-		foreach (var category in skillCategories.Values.Distinct())
+		while (selectedSkills.Count() < numSkills)
 		{
-			var categorySkills = skillCategories.Where(pair => pair.Value.Intersect(category).Any()).Select(pair => pair.Key).ToList();
+			var weightedSkills = new Dictionary<Skill, float>();
 
-			// Calculate the number of skills to select from this category
-			var categorySkillsCount = Mathf.RoundToInt(numSkills * Random.Range(0.2f, 0.8f));
-			categorySkillsCount = Mathf.Min(categorySkillsCount, numSkills - randomSkills.Count);
+			foreach (var skill in allSkills) 
+				if (!selectedSkills.Contains(skill))
+					weightedSkills[skill] = 0.1f;
 
-			// Randomly select skills from the current category
-			for (int i = 0; i < categorySkillsCount && categorySkills.Count > 0; i++)
+			foreach (var skill in selectedSkills)
 			{
-				var randomIndex = Random.Range(0, categorySkills.Count);
-				var selectedSkill = categorySkills[randomIndex];
-
-				// Check if the skill has already been selected
-				while (selectedSkills.Contains(selectedSkill))
+				foreach (var category in skill.Info().categories)
 				{
-					randomIndex = Random.Range(0, categorySkills.Count);
-					selectedSkill = categorySkills[randomIndex];
+					foreach (var s in allSkills.Where(i => i.Info().categories.Contains(category)))
+					{
+						if (weightedSkills.ContainsKey(s))
+							weightedSkills[s] += 1f;
+					}
 				}
-
-				randomSkills.Add(selectedSkill);
-				selectedSkills.Add(selectedSkill);
-
-				categorySkills.RemoveAt(randomIndex);
 			}
-		}
 
-		// Fill in the remaining skills with random ones
-		for (int i = randomSkills.Count; i < numSkills; i++)
-		{
-			var randomIndex = Random.Range(0, allSkills.Count);
-			var selectedSkill = allSkills[randomIndex];
+			var skills = weightedSkills.Keys.ToArray();
+			var weights = weightedSkills.Values.ToArray();
+			var cumulative = weights.Select((w, i) => weights.Take(i + 1).Sum()).ToArray();
 
-			// Check if the skill has already been selected
-			while (selectedSkills.Contains(selectedSkill))
+			var random = Random.Range(0f, cumulative.Last());
+
+			int i = 0;
+			while (true)
 			{
-				randomIndex = Random.Range(0, allSkills.Count);
-				selectedSkill = allSkills[randomIndex];
+				if (cumulative[i] > random) break;
+				i++;
 			}
 
-			randomSkills.Add(selectedSkill);
-			selectedSkills.Add(selectedSkill);
+			selectedSkills.Add(skills[i]);
 		}
 
-		return randomSkills.ToArray();
+		return selectedSkills.ToArray();
 	}
+
 	public Employee(string name, int salary, int age, TimeSpan experience, Skill[] skills)
 	{
 		name_ = name;
-		this.salary = salary;
+		this.requestedSalary = salary;
 		this.birthday = Game.i.Time - TimeSpan.FromDays(age * 365) + TimeSpan.FromDays(Random.Range(0, 364));
 		workedSince = Game.i.Time.Subtract(experience);
 		this.skills = skills;
 
 		looks = EmployeeLooks.RandomLooks();
-	}
-
-	public void SetAssignedOrder(Order order)
-	{
-		assignedOrder?.assignedEmployees.Remove(this);
-		order?.assignedEmployees.Add(this);
-		assignedOrder = order;
 	}
 }
 

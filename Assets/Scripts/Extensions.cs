@@ -20,5 +20,7 @@ public static class Extensions
 		};
 	}
 
+	public static SkillInfo Info(this Skill skill) => SkillInfo.infos[skill];
+
 	public static string ToSkillString( this IEnumerable<Skill> skills) => string.Join(", ", skills.Select(s => s.ToDisplayText()));
 }

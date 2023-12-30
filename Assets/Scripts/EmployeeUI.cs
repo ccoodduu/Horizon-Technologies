@@ -34,7 +34,7 @@ public class EmployeeUI : MonoBehaviour
 		nameText.text = employee.name_;
 		ageText.text = employee.Age + "y/o";
 		experienceText.text = "Exp: " + ((int)employee.Experience.TotalDays / 365) + "y";
-		salaryText.text = employee.salary + "$/m";
+		salaryText.text = (type is EmployeeUIType.Hire ? employee.requestedSalary : employee.salary) + "$/m";
 		skillText.text = employee.skills.ToSkillString();
 
 		// image
