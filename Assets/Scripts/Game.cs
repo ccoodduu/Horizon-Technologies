@@ -74,6 +74,15 @@ public class Game : MonoBehaviour
 	[SerializeField] private TMP_Text moneyText;
 	[SerializeField] private TMP_Text currentOrdersText;
 
+	[Header("Icon Buttons")]
+	[SerializeField] private IconButton hirePanelButton;
+	[SerializeField] private IconButton employeesPanelButton;
+	[SerializeField] private IconButton officePanelButton;
+	[SerializeField] private IconButton incommingOrdersPanelButton;
+	[SerializeField] private IconButton currentOrdersPanelButton;
+
+
+
 	public string companyName;
 
 	public static Game i;
@@ -206,11 +215,13 @@ public class Game : MonoBehaviour
 		{
 			AvailableOrders.Add(Order.Generate());
 			nextOrderChance = orderFrequency;
+			incommingOrdersPanelButton.EnableDot();
 		}
 		if (Random.Range(0, nextJobApplicationChance) == 0)
 		{
 			JobApplications.Add(Employee.Generate());
 			nextJobApplicationChance = jobApplicationFrequency;
+			hirePanelButton.EnableDot();
 		}
 
 		AvailableOrdersPanel.i.UpdatePanel();
@@ -231,6 +242,9 @@ public class Game : MonoBehaviour
 			{
 				Fire(employee);
 				reputation -= .5f;
+
+				PopupManager.i.AddPopup(new Popup(employee.name_ + " quit because of low happiness.", () => EmployeesPanel.i.gameObject.SetActive(true)));
+				employeesPanelButton.EnableDot();
 			}
 		}
 	}
