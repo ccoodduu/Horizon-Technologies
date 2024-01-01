@@ -197,6 +197,8 @@ public class Game : MonoBehaviour
 				var workedPoints = (float)workedTime.TotalHours * order.GetWorkingSpeed();
 				order.workedPoints += workedPoints;
 
+				if (order.workedPoints > 0) order.timeSpent += workedTime;
+
 				if (order.Completion > 1f)
 				{
 					CompleteOrder(order);
@@ -282,12 +284,23 @@ public class Game : MonoBehaviour
 			return;
 		}
 
-		var timeFee = (order.deadline > Time) ? 0f : (float)(order.deadline - Time).TotalDays;
+		var daysOverDeadline = (order.deadline > Time) ? 0f : (float)(order.deadline - Time).TotalDays;
+		var timeFee = Mathf.RoundToInt(Mathf.Ceil(daysOverDeadline) * order.difficultyMultiplier * -100);
 
-		Money += order.Payment + (int)timeFee * -100;
+		var moneyChanges = new MoneyChange[]
+		{
+			new MoneyChange { amount = order.Payment, cause = "Payment" },
+			new MoneyChange { amount = timeFee, cause = "Deadline" },
+		};
 
-		Reputation -= timeFee * 0.05f;
-		Reputation += .5f;
+		float reputationChange = 0;
+		reputationChange -= daysOverDeadline * 0.05f;
+		reputationChange += .5f;
+
+		OrderFinishedPanel.i.OpenPanel(order, reputationChange, moneyChanges);
+
+		Money += moneyChanges.Sum(ch => ch.amount);
+		Reputation += reputationChange;
 	}
 
 	public void Hire(Employee employee)

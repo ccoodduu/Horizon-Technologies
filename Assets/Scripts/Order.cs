@@ -16,6 +16,8 @@ public class Order
 	public List<Employee> assignedEmployees;
 	public float workedPoints;
 
+	public TimeSpan timeSpent;
+
 	public int Payment => Mathf.RoundToInt(orderDescription.payment * difficultyMultiplier);
 	public float Completion => workedPoints / orderDescription.workPoints;
 
