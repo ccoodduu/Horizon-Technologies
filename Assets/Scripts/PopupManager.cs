@@ -72,6 +72,8 @@ public class PopupManager : MonoBehaviour
 		time = 0;
 		hide = false;
 
+		canvasGroup.blocksRaycasts = true;
+
 		var popup = popups[0];
 
 		text.text = popup.text;
@@ -87,6 +89,8 @@ public class PopupManager : MonoBehaviour
 		startHideTime = time;
 
 		hide = true;
+
+		canvasGroup.blocksRaycasts = false;
 
 		popups.RemoveAt(0);
 	}

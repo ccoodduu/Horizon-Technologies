@@ -6410,7 +6410,7 @@ CanvasGroup:
   m_Enabled: 1
   m_Alpha: 1
   m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
 --- !u!114 &717102619
 MonoBehaviour:
@@ -11852,7 +11852,7 @@ PrefabInstance:
     - target: {fileID: 3568833484344793288, guid: 9787a371ef4db11418c528d7a5f0ae5c, type: 3}
       propertyPath: target
       value: 
-      objectReference: {fileID: 1894457838}
+      objectReference: {fileID: 698715549}
     - target: {fileID: 4689969488134622889, guid: 9787a371ef4db11418c528d7a5f0ae5c, type: 3}
       propertyPath: m_SizeDelta.x
       value: 120

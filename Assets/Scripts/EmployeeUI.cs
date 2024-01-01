@@ -18,7 +18,7 @@ public class EmployeeUI : MonoBehaviour
 	[SerializeField] private EmployeeImage employeeImage;
 
 	[Header("Buttons")]
-	[SerializeField] private Button hireButton;
+	[SerializeField] private GameObject hireButtons;
 	[SerializeField] private Button fireButton;
 
 	public Employee employee { get; private set; }
@@ -44,17 +44,17 @@ public class EmployeeUI : MonoBehaviour
 		switch (type)
 		{
 			case EmployeeUIType.Hire:
-				hireButton.gameObject.SetActive(true);
+				hireButtons.SetActive(true);
 				fireButton.gameObject.SetActive(false);
 				break;
 
 			case EmployeeUIType.Fire:
-				hireButton.gameObject.SetActive(false);
+				hireButtons.SetActive(false);
 				fireButton.gameObject.SetActive(true);
 				break;
 
 			case EmployeeUIType.Show:
-				hireButton.gameObject.SetActive(false);
+				hireButtons.SetActive(false);
 				fireButton.gameObject.SetActive(false);
 				break;
 		}
@@ -65,6 +65,13 @@ public class EmployeeUI : MonoBehaviour
 		if (employee == null) return;
 
 		Game.i.Hire(employee);
+	}
+
+	public void Reject()
+	{
+		if (employee == null) return;
+
+		Game.i.Reject(employee);
 	}
 
 	public void Fire()

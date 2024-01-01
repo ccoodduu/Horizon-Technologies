@@ -82,7 +82,7 @@ public class Game : MonoBehaviour
 	[SerializeField] private IconButton currentOrdersPanelButton;
 
 
-
+	[Header("Other")]
 	public string companyName;
 
 	public static Game i;
@@ -302,6 +302,12 @@ public class Game : MonoBehaviour
 
 		Employees.Add(employee);
 		EmployeesPanel.i.UpdatePanel();
+	}
+
+	public void Reject(Employee employee)
+	{
+		JobApplications.Remove(employee);
+		HirePanel.i.UpdatePanel();
 	}
 
 	public void Fire(Employee employee)
