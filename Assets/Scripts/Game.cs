@@ -373,7 +373,7 @@ public class Game : MonoBehaviour
 		 * <mspace=mspace=38>13:39</mspace>
 		 */
 
-		var text = "<mspace=mspace=38>" + Time.ToString("HH:mm") + "</mspace>";
+		var text = "<mspace=mspace=38>" + Time.ToString("HH:") + TimeSpan.FromMinutes(Time.Minute / 15 * 15).ToString("mm") + "</mspace>";
 
 		timeText.text = text;
 	}
