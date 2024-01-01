@@ -10,12 +10,15 @@ public class EmployeesPanel : MonoBehaviour
 	[SerializeField] private GameObject employeeUIContainer;
 	[SerializeField] private GameObject employeeUIPrefab;
 
-	void Start()
+	void Awake()
 	{
 		i = this;
-
-		UpdatePanel();
 		gameObject.SetActive(false);
+	}
+
+	void Start()
+	{
+		UpdatePanel();
 	}
 
 	public void UpdatePanel()

@@ -20,7 +20,7 @@ public class EmployeeViewPanel : MonoBehaviour
 	[SerializeField] private EmployeeImage image;
     [SerializeField] private TMP_Dropdown assignedTaskDropdown;
 
-	void Start()
+	void Awake()
 	{
 	    i = this;
 	}

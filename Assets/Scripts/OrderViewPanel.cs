@@ -18,7 +18,7 @@ public class OrderViewPanel : MonoBehaviour
 	public static OrderViewPanel i;
 	public Order order { get; private set; }
 
-	void Start()
+	void Awake()
 	{
 		i = this;
 	}

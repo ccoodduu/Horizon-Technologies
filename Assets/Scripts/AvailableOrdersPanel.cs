@@ -10,12 +10,15 @@ public class AvailableOrdersPanel : MonoBehaviour
     [SerializeField] private GameObject orderRequestUIPrefab;
     [SerializeField] private GameObject orderUIContainer;
 
-	void Start()
+	void Awake()
 	{
 		i = this;
-
-		UpdatePanel();
 		gameObject.SetActive(false);
+	}
+
+	void Start()
+	{
+		UpdatePanel();
 	}
 
 	public void UpdatePanel()

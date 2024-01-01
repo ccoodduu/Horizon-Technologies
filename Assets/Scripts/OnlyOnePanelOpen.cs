@@ -4,23 +4,16 @@ using UnityEngine;
 
 public class OnlyOnePanelOpen : MonoBehaviour
 {
-    private bool isStarted;
-
-	private void Start()
-	{
-		isStarted = true;
-	}
-
 	private void OnEnable()
 	{
-        if (!isStarted) return;
+		if (!Game.i.doneInit) return;
 
-        var canvas = GameObject.FindGameObjectWithTag("Canvas");
-        foreach (var panel in canvas.GetComponentsInChildren<OnlyOnePanelOpen>())
-        {
-            if (panel == this) continue;
-            panel.gameObject.SetActive(false);
-        }
+		var canvas = GameObject.FindGameObjectWithTag("Canvas");
+		foreach (var panel in canvas.GetComponentsInChildren<OnlyOnePanelOpen>())
+		{
+			if (panel == this) continue;
+			panel.gameObject.SetActive(false);
+		}
 
 		foreach (var panel in canvas.GetComponentsInChildren<AutoClosePanel>())
 		{

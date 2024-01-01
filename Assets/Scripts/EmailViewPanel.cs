@@ -31,7 +31,7 @@ public class EmailViewPanel : MonoBehaviour
 	private ContentSizeFitter contentSizeFitter;
 
 
-	void Start()
+	void Awake()
 	{
 		i = this;
 		contentSizeFitter = bodyText.GetComponent<ContentSizeFitter>();

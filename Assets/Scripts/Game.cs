@@ -9,6 +9,8 @@ using Random = UnityEngine.Random;
 
 public class Game : MonoBehaviour
 {
+	public bool doneInit { get; private set; }
+
 	[Header("Time")]
 	[SerializeField] private float dayLengthInSeconds;
 	[SerializeField] private float nightLengthInSeconds;
@@ -96,6 +98,8 @@ public class Game : MonoBehaviour
 
 	void Awake()
 	{
+		doneInit = false;
+
 		if (i == null) i = this;
 		DontDestroyOnLoad(this);
 
@@ -137,6 +141,11 @@ public class Game : MonoBehaviour
 
 		SetTimeText();
 		SetDateText();
+	}
+
+	void Start()
+	{
+		doneInit = true;
 	}
 
 	void Update()

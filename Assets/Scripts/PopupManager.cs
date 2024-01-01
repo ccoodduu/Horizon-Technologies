@@ -29,7 +29,7 @@ public class PopupManager : MonoBehaviour
 	private float time = float.MaxValue;
 	private bool hide = true;
 
-	void Start()
+	void Awake()
 	{
 		i = this;	
 	}

@@ -21,7 +21,7 @@ public class Multipliers : MonoBehaviour
 
 	public static Multipliers i;
 
-    void Start()
+    void Awake()
     {
         i = this;
     }

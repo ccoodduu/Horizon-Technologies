@@ -10,12 +10,15 @@ public class HirePanel : MonoBehaviour
 	[SerializeField] private GameObject employeeUIContainer;
 	[SerializeField] private GameObject employeeUIPrefab;
 
-	void Start()
+	void Awake()
 	{
 		i = this;
-
-		UpdatePanel();	
 		gameObject.SetActive(false);
+	}
+
+	void Start()
+	{
+		UpdatePanel();	
 	}
 
 	public void UpdatePanel()
@@ -35,5 +38,10 @@ public class HirePanel : MonoBehaviour
 
 		var eUI = gameObject.GetComponent<EmployeeUI>();
 		eUI.SetParameters(employee, EmployeeUIType.Hire);
+	}
+
+	private void OnDisable()
+	{
+		;
 	}
 }
