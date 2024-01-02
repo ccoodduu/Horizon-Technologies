@@ -11,5 +11,7 @@ public class OfficeManager : MonoBehaviour
 	void Start()
 	{
 		Game.i.officeManager = this;
+
+		Game.i.OfficeIsLoaded();
 	}
 }

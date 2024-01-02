@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public class Game : MonoBehaviour
@@ -67,8 +68,10 @@ public class Game : MonoBehaviour
 	public OfficeManager officeManager;
 	public OfficeType OfficeType => officeManager.officeType;
 
-	[Space(5)]
-	[SerializeField] private GameObject deskContainer;
+	private int currentOffice;
+	public int[] officePrices;
+
+	public int NextOfficePrice => officePrices[currentOffice + 1];
 
 	[Header("UI")]
 	[SerializeField] private TMP_Text timeText;
@@ -106,10 +109,8 @@ public class Game : MonoBehaviour
 		SkillInfo.Init();
 
 		Time = foundingDate;
-		DesksOwned = 0;
 		Money = 10000;
-
-		BuyDeskFree();
+		currentOffice = 0;
 
 		Employees = new();
 
@@ -184,7 +185,7 @@ public class Game : MonoBehaviour
 		{
 			if (!employee.hasDesk)
 			{
-				var employeeSpaces = deskContainer.GetComponentsInChildren<EmployeeRender>();
+				var employeeSpaces = officeManager.desks.Where(g => g.activeSelf).Select(g => g.GetComponentInChildren<EmployeeRender>()).ToArray();
 
 				var emptySpace = employeeSpaces.FirstOrDefault(e => e.employee == null);
 				if (emptySpace != null)
@@ -334,6 +335,8 @@ public class Game : MonoBehaviour
 
 	public void Fire(Employee employee)
 	{
+		if (employee.name_ == "You") return;
+
 		employee.employeeRender.employee = null;
 		employee.assignedOrder?.assignedEmployees.Remove(employee);
 
@@ -341,6 +344,31 @@ public class Game : MonoBehaviour
 		EmployeesPanel.i.UpdatePanel();
 	}
 
+	public void BuyNewOffice()
+	{
+		if (currentOffice + 1 >= officePrices.Length) return;
+		if (Money < NextOfficePrice) return;
+
+		Money -= NextOfficePrice;
+		currentOffice++;
+
+		foreach (var employee in Employees)
+		{
+			employee.hasDesk = false;
+			employee.employeeRender = null;
+		}
+
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+	}
+
+	public void OfficeIsLoaded()
+	{
+		DesksOwned = 0;
+		BuyDeskFree();
+		
+		OfficeManagementPanel.i.gameObject.SetActive(false);
+	}
+ 
 	public void BuyDesk()
 	{
 		var price = 100;
