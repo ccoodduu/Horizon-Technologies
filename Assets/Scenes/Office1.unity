@@ -15301,7 +15301,7 @@ MonoBehaviour:
   officePanelButton: {fileID: 654816511}
   incommingOrdersPanelButton: {fileID: 2030092853}
   currentOrdersPanelButton: {fileID: 1295821326}
-  companyName: Software Company
+  companyName: Horizon Technologies
   jobApplicationFrequency: 7
   orderFrequency: 7
 --- !u!4 &1722762922

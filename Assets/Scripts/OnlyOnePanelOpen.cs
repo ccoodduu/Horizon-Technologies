@@ -6,7 +6,7 @@ public class OnlyOnePanelOpen : MonoBehaviour
 {
 	private void OnEnable()
 	{
-		if (!Game.i.doneInit) return;
+		if (!Game.i.DoneInit) return;
 
 		var canvas = GameObject.FindGameObjectWithTag("Canvas");
 		foreach (var panel in canvas.GetComponentsInChildren<OnlyOnePanelOpen>())

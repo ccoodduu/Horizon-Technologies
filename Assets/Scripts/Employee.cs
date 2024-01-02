@@ -46,7 +46,7 @@ public class Employee
 			return Mathf.Clamp01(happiness);
 		}
 	}
-	
+
 	public float WorkingSpeed
 	{
 		get
@@ -112,7 +112,7 @@ public class Employee
 		{
 			var weightedSkills = new Dictionary<Skill, float>();
 
-			foreach (var skill in allSkills) 
+			foreach (var skill in allSkills)
 				if (!selectedSkills.Contains(skill))
 					weightedSkills[skill] = 0.1f;
 
@@ -183,9 +183,17 @@ public static class NameGenerator
 		"Liam", "Madison", "Nathan", "Oscar", "Penelope", "Rebecca", "Sebastian", "Stephen", "Tara",
 		"Brandon", "Cassandra", "Derek", "Eliza", "Fiona", "Gavin", "Heather", "Isaiah", "Jasmine",
 		"Kevin", "Luna", "Mason", "Natalie", "Olive", "Patrick", "Quincy", "Riley", "Samantha", "Trevor",
-		"Violet", "Wyatt", "Zion"
+		"Violet", "Wyatt", "Zion", "Jimmy", "Jamie", "Malcolm", "Bruce", "Dewey", "Francis", "Morty",
+		"Janett", "Cornelius", "Arthur", "Connan", "Jerry", "Karl", "Kim", "Andrea", "Rosa", "Linguine",
+		"James", "Mario", "Luigi", "Maurice", "King", "Jeff", "Mike", "Andy", "Joe", "Ludwig",
+		"Eleanor", "Tom", "Sophie", "Ryan", "Charlotte", "Max", "Avery", "Isaac", "Lucy", "Nolan",
+		"Leah", "Elijah", "Hannah", "Caleb", "Audrey", "Gabriel", "Stella", "Jordan", "Nora", "Evan",
+		"Alexis", "Isaiah", "Lily", "Nicholas", "Grace", "Victor", "Maya", "Tristan", "Scarlett", "Dylan",
+		"Aiden", "Peyton", "Isabelle", "Alex", "Xavier", "Sophia", "Jaxon", "Aria", "Carter", "Mila",
+		"Morgan", "Quinn", "Landon", "Eva", "Piper", "Gideon", "Zara", "Colton", "Aurora", "Jaden",
+		"Nova", "Cameron", "Delilah", "Owen", "Willow", "Ezekiel", "Hazel", "Gemma", "Bentley", "Isla",
+		"Xander", "Daisy", "Maxwell", "Nina", "Ezra", "Sadie", "Kai", "Lila", "Brayden", "Evelyn"
 	};
-
 	public static string[] lastName = new string[]
 	{
 		"Anderson", "Andersen", "Brown", "Carter", "Davis", "Evans", "Fisher", "Garcia", "Hill", "Irwin", "Johnson",
@@ -194,6 +202,12 @@ public static class NameGenerator
 		"Edwards", "Fletcher", "Gomez", "Hall", "Ingram", "Jenkins", "Kim", "Lambert", "Morgan", "Nguyen",
 		"O'Brien", "Parker", "Quigley", "Reid", "Stewart", "Tucker", "Underhill", "Valentine", "Woods", "Archer",
 		"Bennett", "Cunningham", "Duncan", "Emerson", "Floyd", "Galloway", "Hawkins", "Jefferson", "Kendrick",
-		"Montgomery", "Nash", "Ortega", "Pierce", "Roth", "Sullivan", "Thompson", "Vance", "Webster", "York"
+		"Montgomery", "Nash", "Ortega", "Pierce", "Roth", "Sullivan", "Thompson", "Vance", "Webster", "York",
+		"Mama", "Vanderbilt", "Harrington", "Hendricks", "Winston", "Lawson", "Hudson", "Higgins", "Hendrix", "Thornton",
+		"Barlow", "Beaumont", "Livingston", "Ramsey", "Winters", "Dalton", "Everett", "Wilder", "Fitzgerald", "Hayes",
+		"Gallagher", "Lancaster", "Shepherd", "Langley", "Mercer", "Carmichael", "Dalton", "Fitzpatrick", "Hensley", "Sawyer",
+		"McCarthy", "Callahan", "Monroe", "Morrison", "O'Donnell", "Farrell", "Quinn", "Redmond", "Sheridan", "Vaughn",
+		"Wainwright", "Hartman", "Holloway", "Baxter", "Wynn", "McKenzie", "Fleming", "Tate", "Wolfe", "Irving",
+		"Gibson", "Stevens", "Rowland", "Browning", "Gilliam", "Walsh", "Ward", "Hammond", "Wheeler", "Garrison"
 	};
 }
