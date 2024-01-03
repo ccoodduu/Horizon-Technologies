@@ -7,24 +7,24 @@ using UnityEngine;
 
 public class EmployeeViewPanel : MonoBehaviour
 {
-    public static EmployeeViewPanel i;
+	public static EmployeeViewPanel i;
 
-    private Employee employee;
+	private Employee employee;
 
-    [SerializeField] private GameObject panel;
+	[SerializeField] private GameObject panel;
 
-    [Header("UI")]
-    [SerializeField] private TMP_Text nameText;
-    [SerializeField] private TMP_Text aboutText;
+	[Header("UI")]
+	[SerializeField] private TMP_Text nameText;
+	[SerializeField] private TMP_Text aboutText;
 	[SerializeField] private TMP_Text statsText;
 	[SerializeField] private EmployeeImage image;
-    [SerializeField] private TMP_Dropdown assignedTaskDropdown;
+	[SerializeField] private TMP_Dropdown assignedTaskDropdown;
 	[SerializeField] private TMP_InputField newSalaryInputField;
 
 
 	void Awake()
 	{
-	    i = this;
+		i = this;
 	}
 
 	public void DontBeNegative(string value)
@@ -34,29 +34,29 @@ public class EmployeeViewPanel : MonoBehaviour
 
 	public void SetSalary(string value)
 	{
-        employee.salary = int.Parse(value);
+		employee.salary = int.Parse(value);
 
 		UpdatePanel();
 		EmployeesPanel.i.UpdatePanel();
 	}
 
 	public void ChangeAssignedTask(int option)
-    {
-        if (option == 0) employee.SetAssignedOrder(null);
-        employee.SetAssignedOrder(Game.i.CurrentOrders[option - 1]);
-    }
+	{
+		if (option == 0) employee.SetAssignedOrder(null);
+		employee.SetAssignedOrder(Game.i.CurrentOrders[option - 1]);
+	}
 
 	public void Open(Employee employee)
-    {
-        panel.SetActive(true);
+	{
+		panel.SetActive(true);
 
-        this.employee = employee;
+		this.employee = employee;
 
 		UpdatePanel();
 	}
 
-    public void UpdatePanel()
-    {
+	public void UpdatePanel()
+	{
 		image.SetImage(employee);
 
 		nameText.text = employee.name_;
@@ -69,6 +69,7 @@ public class EmployeeViewPanel : MonoBehaviour
 		statsString.AppendLine("Employed since: " + employee.employedSince.ToString("dd/MM/yyyy"));
 		statsString.AppendLine("Happiness: " + Mathf.RoundToInt(employee.Happiness * 100) + "%");
 		statsString.AppendLine("Skills: " + employee.skills.ToSkillString());
+		statsString.AppendLine("Working speed: " + Mathf.Round(employee.WorkingSpeed * 100) / 100 + "x");
 
 		statsText.text = statsString.ToString();
 
