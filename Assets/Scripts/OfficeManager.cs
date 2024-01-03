@@ -15,3 +15,13 @@ public class OfficeManager : MonoBehaviour
 		Game.i.OfficeIsLoaded();
 	}
 }
+
+[System.Serializable]
+public struct Office
+{
+	public int price;
+	public int desks;
+	public float happinessBonus;
+	public float reputationBonus;
+	public string look;
+}

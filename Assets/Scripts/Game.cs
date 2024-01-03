@@ -68,10 +68,14 @@ public class Game : MonoBehaviour
 	public OfficeManager officeManager;
 	public OfficeType OfficeType => officeManager.officeType;
 
-	private int currentOffice;
-	public int[] officePrices;
+	private int currentOfficeIndex;
+	public Office[] offices;
 
-	public int NextOfficePrice => officePrices[currentOffice + 1];
+	[SerializeField] private int deskPrice;
+	public int DeskPrice => deskPrice;
+
+	public Office NextOffice => currentOfficeIndex + 1 < offices.Length ? offices[currentOfficeIndex + 1] : new Office();
+	public Office CurrentOffice => offices[currentOfficeIndex];
 
 	[Header("UI")]
 	[SerializeField] private TMP_Text timeText;
@@ -110,7 +114,7 @@ public class Game : MonoBehaviour
 
 		Time = foundingDate;
 		Money = 1000000;
-		currentOffice = 0;
+		currentOfficeIndex = 0;
 
 		Employees = new();
 
@@ -346,11 +350,11 @@ public class Game : MonoBehaviour
 
 	public void BuyNewOffice()
 	{
-		if (currentOffice + 1 >= officePrices.Length) return;
-		if (Money < NextOfficePrice) return;
+		if (currentOfficeIndex + 1 >= offices.Length) return;
+		if (Money < NextOffice.price) return;
 
-		Money -= NextOfficePrice;
-		currentOffice++;
+		Money -= NextOffice.price;
+		currentOfficeIndex++;
 
 		foreach (var employee in Employees)
 		{
@@ -367,15 +371,15 @@ public class Game : MonoBehaviour
 		BuyDeskFree();
 		
 		OfficeManagementPanel.i.gameObject.SetActive(false);
+		OfficeManagementPanel.i.UpdatePanel();
 	}
- 
+
 	public void BuyDesk()
 	{
-		var price = 100;
-		if (Money < price) return;
+		if (Money < deskPrice) return;
 		if (officeManager.desks.Length <= DesksOwned) return;
 
-		Money -= price;
+		Money -= deskPrice;
 		BuyDeskFree();
 	}
 	public void BuyDeskFree()
@@ -383,6 +387,7 @@ public class Game : MonoBehaviour
 		if (officeManager.desks.Length <= DesksOwned) return;
 
 		DesksOwned++;
+		OfficeManagementPanel.i.UpdatePanel();
 
 		foreach (var desk in officeManager.desks)
 		{
