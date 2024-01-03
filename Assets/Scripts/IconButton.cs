@@ -20,4 +20,9 @@ public class IconButton : MonoBehaviour
 		if (target.activeSelf) return;
 		dot.enabled = true;
 	}
+
+	public void DisableDot()
+	{
+		dot.enabled = false;
+	}
 }

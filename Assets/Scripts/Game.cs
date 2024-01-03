@@ -231,13 +231,23 @@ public class Game : MonoBehaviour
 		{
 			AvailableOrders.Add(Order.Generate());
 			nextOrderChance = orderFrequency;
+
 			incommingOrdersPanelButton.EnableDot();
+			PopupManager.i.AddPopup(new Popup(
+				"New order available",
+				() => { AvailableOrdersPanel.i.gameObject.SetActive(true); incommingOrdersPanelButton.DisableDot(); }
+			));
 		}
 		if (Random.Range(0, nextJobApplicationChance) == 0)
 		{
 			JobApplications.Add(Employee.Generate());
 			nextJobApplicationChance = jobApplicationFrequency;
+
 			hirePanelButton.EnableDot();
+			PopupManager.i.AddPopup(new Popup(
+				"New job application",
+				() => { HirePanel.i.gameObject.SetActive(true); hirePanelButton.DisableDot(); }
+			));
 		}
 
 		AvailableOrdersPanel.i.UpdatePanel();
@@ -259,7 +269,10 @@ public class Game : MonoBehaviour
 				Fire(employee);
 				reputation -= .5f;
 
-				PopupManager.i.AddPopup(new Popup(employee.name_ + " quit because of low happiness.", () => EmployeesPanel.i.gameObject.SetActive(true)));
+				PopupManager.i.AddPopup(new Popup(
+					employee.name_ + " quit because of low happiness.",
+					() => EmployeesPanel.i.gameObject.SetActive(true))
+				);
 				employeesPanelButton.EnableDot();
 			}
 		}
@@ -321,9 +334,10 @@ public class Game : MonoBehaviour
 	{
 		if (DesksOwned <= Employees.Count)
 		{
-			PopupManager.i.AddPopup(new Popup() { 
-				text = "Can't hire employee! No available desks. ", 
-				onClick = () => OfficeManagementPanel.i.gameObject.SetActive(true) 
+			PopupManager.i.AddPopup(new Popup()
+			{
+				text = "Can't hire employee! No available desks. ",
+				onClick = () => OfficeManagementPanel.i.gameObject.SetActive(true)
 			});
 			return;
 		}
@@ -376,7 +390,7 @@ public class Game : MonoBehaviour
 	{
 		DesksOwned = 0;
 		BuyDeskFree();
-		
+
 		OfficeManagementPanel.i.gameObject.SetActive(false);
 		OfficeManagementPanel.i.UpdatePanel();
 	}
