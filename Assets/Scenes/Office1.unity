@@ -15932,7 +15932,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseHappiness: 0.8
-  saleryHappinessMultiplier: 1
+  salaryHappinessMultiplier: 1
   skillHappinessMultiplier: 1.2
   baseSpeed: 1
   happinessSpeedMultiplier: 1
@@ -16631,7 +16631,7 @@ GameObject:
   - component: {fileID: 1861152698}
   - component: {fileID: 1861152697}
   m_Layer: 5
-  m_Name: Set Salery
+  m_Name: Set Salary
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16722,7 +16722,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1894457841}
         m_TargetAssemblyTypeName: EmployeeViewPanel, Assembly-CSharp
-        m_MethodName: SetSalery
+        m_MethodName: SetSalary
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -17713,7 +17713,7 @@ MonoBehaviour:
   statsText: {fileID: 752291060}
   image: {fileID: 1136019781}
   assignedTaskDropdown: {fileID: 637226002}
-  newSaleryInputField: {fileID: 1861152697}
+  newSalaryInputField: {fileID: 0}
 --- !u!1 &1899000862
 GameObject:
   m_ObjectHideFlags: 0

@@ -19,7 +19,7 @@ public class EmployeeViewPanel : MonoBehaviour
 	[SerializeField] private TMP_Text statsText;
 	[SerializeField] private EmployeeImage image;
     [SerializeField] private TMP_Dropdown assignedTaskDropdown;
-	[SerializeField] private TMP_InputField newSaleryInputField;
+	[SerializeField] private TMP_InputField newSalaryInputField;
 
 
 	void Awake()
@@ -29,10 +29,10 @@ public class EmployeeViewPanel : MonoBehaviour
 
 	public void DontBeNegative(string value)
 	{
-		if (value == "-") newSaleryInputField.text = "";
+		if (value == "-") newSalaryInputField.text = "";
 	}
 
-	public void SetSalery(string value)
+	public void SetSalary(string value)
 	{
         employee.salary = int.Parse(value);
 
@@ -78,7 +78,7 @@ public class EmployeeViewPanel : MonoBehaviour
 
 		assignedTaskDropdown.value = Game.i.CurrentOrders.IndexOf(employee.assignedOrder) + 1;
 
-		newSaleryInputField.text = "";
-		newSaleryInputField.gameObject.SetActive(employee.name_ != "You");
+		newSalaryInputField.text = "";
+		newSalaryInputField.gameObject.SetActive(employee.name_ != "You");
 	}
 }

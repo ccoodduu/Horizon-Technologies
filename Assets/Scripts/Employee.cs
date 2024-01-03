@@ -38,7 +38,7 @@ public class Employee
 
 			var happiness = Multipliers.i.baseHappiness;
 
-			happiness *= ((float)salary / (float)requestedSalary) * Multipliers.i.saleryHappinessMultiplier;
+			happiness *= ((float)salary / (float)requestedSalary) * Multipliers.i.salaryHappinessMultiplier;
 
 			if (assignedOrder != null)
 				happiness *= Mathf.Pow(Multipliers.i.skillHappinessMultiplier, assignedOrder.orderDescription.skills.Select(s => skills.Contains(s)).Count() - 1);

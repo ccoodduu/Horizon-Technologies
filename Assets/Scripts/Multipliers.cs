@@ -6,7 +6,7 @@ public class Multipliers : MonoBehaviour
 {
     [Header("Employee")]
     public float baseHappiness = 0.8f;
-    public float saleryHappinessMultiplier = 1f;
+    public float salaryHappinessMultiplier = 1f;
 	public float skillHappinessMultiplier = 1.2f;
     [Space(5)]
     public float baseSpeed = 1f;
