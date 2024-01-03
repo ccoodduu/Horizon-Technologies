@@ -22,7 +22,7 @@ public class EmployeeUI : MonoBehaviour
 	[SerializeField] private Button fireButton;
 
 	public Employee employee { get; private set; }
-	
+
 	private EmployeeUIType type;
 
 	public void SetParameters(Employee employee, EmployeeUIType type)
@@ -57,6 +57,11 @@ public class EmployeeUI : MonoBehaviour
 				hireButtons.SetActive(false);
 				fireButton.gameObject.SetActive(false);
 				break;
+		}
+
+		if (employee.name_ == "You")
+		{
+			fireButton.gameObject.SetActive(false);
 		}
 	}
 
