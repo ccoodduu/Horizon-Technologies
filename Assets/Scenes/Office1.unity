@@ -15546,7 +15546,7 @@ MonoBehaviour:
   endOfficeHour: 16
   speedChangeDelay: 15
   officeManager: {fileID: 280684186}
-  officePrices: 0000000010270000
+  officePrices: 0000000050c30000400d0300
   timeText: {fileID: 1268723903}
   dateText: {fileID: 1832304327}
   moneyText: {fileID: 2099096385}

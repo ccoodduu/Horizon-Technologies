@@ -109,7 +109,7 @@ public class Game : MonoBehaviour
 		SkillInfo.Init();
 
 		Time = foundingDate;
-		Money = 10000;
+		Money = 1000000;
 		currentOffice = 0;
 
 		Employees = new();
