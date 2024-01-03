@@ -16619,7 +16619,7 @@ MonoBehaviour:
     desks: 18
     happinessBonus: 0.1
     reputationBonus: 1
-    look: Modernlook
+    look: Modern look
   deskPrice: 1000
   timeText: {fileID: 1268723903}
   dateText: {fileID: 1832304327}
@@ -18442,7 +18442,7 @@ MonoBehaviour:
   statsText: {fileID: 752291060}
   image: {fileID: 1136019781}
   assignedTaskDropdown: {fileID: 637226002}
-  newSalaryInputField: {fileID: 0}
+  newSalaryInputField: {fileID: 1861152697}
 --- !u!1 &1899000862
 GameObject:
   m_ObjectHideFlags: 0

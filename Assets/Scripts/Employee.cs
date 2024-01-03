@@ -43,6 +43,8 @@ public class Employee
 			if (assignedOrder != null)
 				happiness *= Mathf.Pow(Multipliers.i.skillHappinessMultiplier, assignedOrder.orderDescription.skills.Select(s => skills.Contains(s)).Count() - 1);
 
+			happiness += Game.i.CurrentOffice.happinessBonus;
+
 			return Mathf.Clamp01(happiness);
 		}
 	}
@@ -51,6 +53,8 @@ public class Employee
 	{
 		get
 		{
+			if (!CanWork) return 0;
+
 			var speed = Multipliers.i.baseSpeed;
 
 			speed *= (Happiness + (1 - Multipliers.i.baseHappiness)) * Multipliers.i.happinessSpeedMultiplier;

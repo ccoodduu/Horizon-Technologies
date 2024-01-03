@@ -383,6 +383,8 @@ public class Game : MonoBehaviour
 			employee.employeeRender = null;
 		}
 
+		reputation += CurrentOffice.reputationBonus;
+
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 	}
 
