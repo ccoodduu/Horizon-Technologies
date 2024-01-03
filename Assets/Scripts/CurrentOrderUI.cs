@@ -28,7 +28,7 @@ public class CurrentOrderUI : MonoBehaviour
 		// Text
 		titleText.text = order.orderDescription.name;
 		progressText.text = Mathf.RoundToInt(order.Completion * 100) + "%";
-		paymentText.text = order.Payment + " $";
+		paymentText.text = order.payment + " $";
 		skillText.text = order.orderDescription.skills.ToSkillString();
 
 		// Image

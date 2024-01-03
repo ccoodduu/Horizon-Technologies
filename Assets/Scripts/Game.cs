@@ -227,7 +227,7 @@ public class Game : MonoBehaviour
 	{
 		SetDateText();
 
-		if (Random.Range(0, nextOrderChance) == 0)
+		if ((AvailableOrders.Count < 3 && CurrentOrders.Count == 0) || Random.Range(0, nextOrderChance) == 0)
 		{
 			AvailableOrders.Add(Order.Generate());
 			nextOrderChance = Mathf.Max(1, orderFrequency + AvailableOrders.Count - (int)reputation / 2);
@@ -316,7 +316,7 @@ public class Game : MonoBehaviour
 
 		var moneyChanges = new MoneyChange[]
 		{
-			new MoneyChange { amount = order.Payment, cause = "Payment" },
+			new MoneyChange { amount = order.payment, cause = "Payment" },
 			new MoneyChange { amount = timeFee, cause = "Deadline" },
 		};
 

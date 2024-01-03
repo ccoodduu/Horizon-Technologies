@@ -27,7 +27,7 @@ public class OrderRequestUI : MonoBehaviour
 		// Text
 		titleText.text = order.orderDescription.name;
 		pointsText.text = order.orderDescription.workPoints + " wp";
-		paymentText.text = order.Payment + " $";
+		paymentText.text = order.payment + " $";
 
 		skillText.text = order.orderDescription.skills.ToSkillString();
 

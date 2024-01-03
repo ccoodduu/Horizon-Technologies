@@ -17,6 +17,9 @@ public class Multipliers : MonoBehaviour
     [Space(5)]
     public float minHappiness = 0.5f;
 
+    [Header("Money")]
+    public int workPointWorth;
+
 	//[Header("Order")]
 
 	public static Multipliers i;

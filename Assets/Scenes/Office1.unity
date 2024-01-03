@@ -16670,6 +16670,7 @@ MonoBehaviour:
   employmentTimeSpeedMultiplier: 1.1
   ageSpeedMultiplier: 0.99
   minHappiness: 0.5
+  workPointWorth: 50
 --- !u!1 &1737244438
 GameObject:
   m_ObjectHideFlags: 0

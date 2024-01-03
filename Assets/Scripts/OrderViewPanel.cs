@@ -44,7 +44,7 @@ public class OrderViewPanel : MonoBehaviour
 
 		var statsString = new StringBuilder();
 
-		statsString.AppendLine("Payment: " + order.Payment + " $");
+		statsString.AppendLine("Payment: " + order.payment + " $");
 		statsString.AppendLine("Progress: " + Mathf.RoundToInt(order.Completion * 100) + "%");
 
 		var estimatedDone = order.EstimatedDone();
