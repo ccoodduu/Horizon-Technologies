@@ -230,7 +230,7 @@ public class Game : MonoBehaviour
 		if (Random.Range(0, nextOrderChance) == 0)
 		{
 			AvailableOrders.Add(Order.Generate());
-			nextOrderChance = orderFrequency;
+			nextOrderChance = Mathf.Max(1, orderFrequency + AvailableOrders.Count - (int)reputation / 2);
 
 			incommingOrdersPanelButton.EnableDot();
 			PopupManager.i.AddPopup(new Popup(
@@ -241,7 +241,7 @@ public class Game : MonoBehaviour
 		if (Random.Range(0, nextJobApplicationChance) == 0)
 		{
 			JobApplications.Add(Employee.Generate());
-			nextJobApplicationChance = jobApplicationFrequency;
+			nextJobApplicationChance = Mathf.Max(1, jobApplicationFrequency + JobApplications.Count - (int)reputation / 2);
 
 			hirePanelButton.EnableDot();
 			PopupManager.i.AddPopup(new Popup(
@@ -304,9 +304,9 @@ public class Game : MonoBehaviour
 
 		if (order.Completion < 1f)
 		{
-			Money -= 100;
+			Money -= 1000;
 
-			Reputation -= .1f;
+			Reputation -= .5f;
 
 			return;
 		}
