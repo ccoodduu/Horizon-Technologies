@@ -64,6 +64,8 @@ public class PopupManager : MonoBehaviour
 
 	public void AddPopup(Popup popup)
 	{
+		if (popups.Contains(popup)) return;
+
 		popups.Add(popup);
 	}
 

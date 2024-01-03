@@ -319,7 +319,14 @@ public class Game : MonoBehaviour
 
 	public void Hire(Employee employee)
 	{
-		if (DesksOwned <= Employees.Count) return;
+		if (DesksOwned <= Employees.Count)
+		{
+			PopupManager.i.AddPopup(new Popup() { 
+				text = "Can't hire employee! No available desks. ", 
+				onClick = () => OfficeManagementPanel.i.gameObject.SetActive(true) 
+			});
+			return;
+		}
 
 		employee.salary = employee.requestedSalary;
 		employee.employedSince = Time;
