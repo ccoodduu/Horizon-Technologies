@@ -16663,7 +16663,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseHappiness: 0.8
   salaryHappinessMultiplier: 1
-  skillHappinessMultiplier: 1.2
+  skillHappinessMultiplier: 1.1
   baseSpeed: 1
   happinessSpeedMultiplier: 1
   experienceSpeedMultiplier: 1.1
