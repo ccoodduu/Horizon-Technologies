@@ -19,10 +19,25 @@ public class EmployeeViewPanel : MonoBehaviour
 	[SerializeField] private TMP_Text statsText;
 	[SerializeField] private EmployeeImage image;
     [SerializeField] private TMP_Dropdown assignedTaskDropdown;
+	[SerializeField] private TMP_InputField newSaleryInputField;
+
 
 	void Awake()
 	{
 	    i = this;
+	}
+
+	public void DontBeNegative(string value)
+	{
+		if (value == "-") newSaleryInputField.text = "";
+	}
+
+	public void SetSalery(string value)
+	{
+        employee.salary = int.Parse(value);
+
+		UpdatePanel();
+		EmployeesPanel.i.UpdatePanel();
 	}
 
 	public void ChangeAssignedTask(int option)
@@ -37,27 +52,33 @@ public class EmployeeViewPanel : MonoBehaviour
 
         this.employee = employee;
 
-        image.SetImage(employee);
+		UpdatePanel();
+	}
 
-        nameText.text = employee.name_;
-        aboutText.text = "Age: " + employee.Age + " y/o";
+    public void UpdatePanel()
+    {
+		image.SetImage(employee);
 
-        var statsString = new StringBuilder();
+		nameText.text = employee.name_;
+		aboutText.text = "Age: " + employee.Age + " y/o";
 
-        statsString.AppendLine("Salary: " + employee.salary + " $");
+		var statsString = new StringBuilder();
+
+		statsString.AppendLine("Salary: " + employee.salary + " $");
 		statsString.AppendLine("Experience: " + (int)employee.Experience.TotalDays / 365 + " y");
 		statsString.AppendLine("Employed since: " + employee.employedSince.ToString("dd/MM/yyyy"));
+		statsString.AppendLine("Happiness: " + Mathf.RoundToInt(employee.Happiness * 100) + "%");
+		statsString.AppendLine("Skills: " + employee.skills.ToSkillString());
 
-        statsString.AppendLine("Happiness: " + Mathf.RoundToInt(employee.Happiness * 100) + "%");
+		statsText.text = statsString.ToString();
 
-        statsString.AppendLine("Skills: " + employee.skills.ToSkillString());
+		assignedTaskDropdown.ClearOptions();
+		assignedTaskDropdown.AddOptions(new List<string> { "None " });
+		assignedTaskDropdown.AddOptions(Game.i.CurrentOrders.Select(i => i.orderDescription.name).ToList());
 
-        statsText.text = statsString.ToString();
+		assignedTaskDropdown.value = Game.i.CurrentOrders.IndexOf(employee.assignedOrder) + 1;
 
-        assignedTaskDropdown.ClearOptions();
-        assignedTaskDropdown.AddOptions(new List<string> { "None "});
-        assignedTaskDropdown.AddOptions(Game.i.CurrentOrders.Select(i => i.orderDescription.name).ToList());
-
-        assignedTaskDropdown.value = Game.i.CurrentOrders.IndexOf(employee.assignedOrder) + 1;
+		newSaleryInputField.text = "";
+		newSaleryInputField.gameObject.SetActive(employee.name_ != "You");
 	}
 }
