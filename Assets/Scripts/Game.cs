@@ -31,7 +31,6 @@ public class Game : MonoBehaviour
 
 	private bool skipToNextDay;
 
-
 	[Header("Money")]
 	private int money;
 	public int Money
@@ -94,6 +93,8 @@ public class Game : MonoBehaviour
 	[Header("Other")]
 	public string companyName;
 
+	public bool isPaused;
+
 	public static Game i;
 
 	[Header("Incoming Requests")]
@@ -107,8 +108,7 @@ public class Game : MonoBehaviour
 	{
 		DoneInit = false;
 
-		if (i == null) i = this;
-		DontDestroyOnLoad(this);
+		i = this;
 
 		SkillInfo.Init();
 
@@ -155,6 +155,8 @@ public class Game : MonoBehaviour
 
 	void Update()
 	{
+		if (isPaused) return;
+
 		// TIME
 		var previousTime = Time;
 

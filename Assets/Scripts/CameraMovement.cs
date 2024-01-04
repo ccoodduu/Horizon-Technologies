@@ -25,6 +25,8 @@ public class CameraMovement : MonoBehaviour
 
 	void Update()
 	{
+		if (Game.i.isPaused) return;
+
 		var c = Camera.main;
 
 		var ratio = (Camera.main.ScreenToWorldPoint(new Vector3(1, 0, 0)) - Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0))).magnitude;
