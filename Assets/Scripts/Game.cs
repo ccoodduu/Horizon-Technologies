@@ -131,15 +131,15 @@ public class Game : MonoBehaviour
 			Employee.Generate(),
 		};
 
-		AvailableOrders = new() { new Order(OrderList.list[0]) };
-
-		AvailableOrders.Add(Order.Generate());
-		AvailableOrders.Add(Order.Generate());
-
 		CurrentOrders = new List<Order>
 		{
 
 		};
+
+		AvailableOrders = new() { new Order(OrderList.list[0]) };
+
+		AvailableOrders.Add(Order.Generate());
+		AvailableOrders.Add(Order.Generate());
 
 		nextJobApplicationChance = jobApplicationFrequency;
 		nextOrderChance = orderFrequency;

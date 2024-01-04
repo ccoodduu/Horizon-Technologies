@@ -24,7 +24,13 @@ public class Order
 
 	public static Order Generate()
 	{
-		var order = OrderList.list.Where(o => !Game.i.AvailableOrders.Any(item => item.orderDescription.name == o.name)).Random();
+		var maxWorkPoints = Game.i.Employees.Count * 100 + Game.i.Reputation * 50;
+
+		var filteredOrders = OrderList.list.Where(o => !Game.i.AvailableOrders.Any(item => item.orderDescription.name == o.name));
+		filteredOrders = filteredOrders.Where(o => !Game.i.CurrentOrders.Any(item => item.orderDescription.name == o.name));
+		filteredOrders = filteredOrders.Where(o => o.workPoints <= maxWorkPoints);
+
+		var order = filteredOrders.Random();
 
 		var difficulty = Mathf.Clamp(Random.Range(1f, Game.i.Reputation / 2), 1f, 5f);
 
