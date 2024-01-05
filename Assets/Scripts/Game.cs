@@ -26,7 +26,6 @@ public class Game : MonoBehaviour
 	public DateTime StartOfficeTime => Time.Subtract(Time.TimeOfDay).Add(TimeSpan.FromHours(startOfficeHour));
 	public DateTime EndOfficeTime => Time.Subtract(Time.TimeOfDay).Add(TimeSpan.FromHours(endOfficeHour));
 	public TimeSpan DailyOfficeTime => EndOfficeTime - StartOfficeTime;
-
 	public TimeSpan CompanyAge => Time.Subtract(foundingDate);
 
 	private bool skipToNextDay;
