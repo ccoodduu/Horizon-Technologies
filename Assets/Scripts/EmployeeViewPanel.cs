@@ -28,6 +28,14 @@ public class EmployeeViewPanel : MonoBehaviour
 		i = this;
 	}
 
+	private void Update()
+	{
+		if (!Game.i.Employees.Contains(employee))
+		{
+			panel.SetActive(false);
+		}
+	}
+
 	public void DontBeNegative(string value)
 	{
 		if (value == "-") newSalaryInputField.text = "";
