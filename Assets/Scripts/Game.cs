@@ -251,9 +251,6 @@ public class Game : MonoBehaviour
 			));
 		}
 
-		AvailableOrdersPanel.i.UpdatePanel();
-		HirePanel.i.UpdatePanel();
-
 		nextOrderChance--;
 		nextJobApplicationChance--;
 
@@ -277,6 +274,17 @@ public class Game : MonoBehaviour
 				employeesPanelButton.EnableDot();
 			}
 		}
+
+		foreach (var order in new List<Order>(AvailableOrders))
+		{
+			if (order.deadline <= Game.i.Time)
+			{
+				AvailableOrders.Remove(order);
+			}
+		}
+
+		AvailableOrdersPanel.i.UpdatePanel();
+		HirePanel.i.UpdatePanel();
 	}
 
 	private void YearPassed()
