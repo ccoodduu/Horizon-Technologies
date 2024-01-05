@@ -36,7 +36,7 @@ public class PauseMenu : MonoBehaviour
 	public void Exit()
 	{
 		var globalParent = Game.i.gameObject.transform.parent;
-		foreach (var ddol in FindObjectsOfType<DontDestroyOnLoad>())
+		foreach (var ddol in FindObjectsOfType<DontDestroyOnLoad>(true))
 		{
 			Destroy(ddol.gameObject);
 		}

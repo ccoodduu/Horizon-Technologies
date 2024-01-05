@@ -7,7 +7,7 @@ public class TutorialArrow : MonoBehaviour
     public string Name;
 
 	private Vector3 originalPosition;
-	void Awake()
+	void Start()
 	{
 		originalPosition = transform.localPosition;
 		gameObject.SetActive(false);
