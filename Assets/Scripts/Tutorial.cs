@@ -137,7 +137,7 @@ public class Tutorial : MonoBehaviour
 			),
 			new TutorialStep(
 				"Now one last thing. \n" +
-				"Try opening the Current Orders Panel",
+				"Try opening the Current Orders Pane.l",
 				() => CurrentOrdersPanel.i.gameObject.activeSelf,
 				GetArrow("Current Orders Button")
 			),
