@@ -10,6 +10,7 @@ public class Tutorial : MonoBehaviour
 {
 	[SerializeField] private GameObject panel;
 	[SerializeField] private Button nextButton;
+	[SerializeField] private Button skipTutorialButton;
 	[SerializeField] private TMP_Text tutorialText;
 
 	[HideInInspector] public bool isDoneWithTutorial;
@@ -150,7 +151,7 @@ public class Tutorial : MonoBehaviour
 				"You can also quickly assign all employees to this order."
 			),
 			new TutorialStep(
-				"Now to finish the tutorial lets get this order finished! \n" + 
+				"Now to finish the tutorial lets get this order finished! \n" +
 				"(Remember you can speed up time)",
 				() => OrderFinishedPanel.i.IsOpen
 			),
@@ -194,8 +195,16 @@ public class Tutorial : MonoBehaviour
 			return;
 		}
 
-		if (step == 0) GetComponent<Image>().enabled = true;
-		else GetComponent<Image>().enabled = false;
+		if (step == 0)
+		{
+			GetComponent<Image>().enabled = true;
+			skipTutorialButton.gameObject.SetActive(true);
+		}
+		else
+		{
+			GetComponent<Image>().enabled = false;
+			skipTutorialButton.gameObject.SetActive(false);
+		}
 
 		CurrentStep.gameObject?.SetActive(true);
 		nextButton.gameObject.SetActive(CurrentStep.nextButton);
@@ -205,6 +214,16 @@ public class Tutorial : MonoBehaviour
 		{
 			nextButton.GetComponentInChildren<TMP_Text>().text = "Close";
 		}
+	}
+
+	public void SkipTutorial()
+	{
+		NextStep();
+		CurrentStep.gameObject?.SetActive(false);
+		nextButton.gameObject.SetActive(false);
+
+		step = steps.Length - 1;
+		NextStep();
 	}
 
 	public void NextButtonPressed() { isNextButtonPressed = true; }
