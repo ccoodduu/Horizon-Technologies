@@ -21,6 +21,7 @@ public class EmployeeViewPanel : MonoBehaviour
 	[SerializeField] private TMP_Dropdown assignedTaskDropdown;
 	[SerializeField] private TMP_InputField newSalaryInputField;
 
+	public bool IsOpen => panel.activeSelf;
 
 	void Awake()
 	{

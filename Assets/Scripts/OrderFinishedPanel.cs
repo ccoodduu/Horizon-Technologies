@@ -17,6 +17,8 @@ public class OrderFinishedPanel : MonoBehaviour
 	[SerializeField] private TMP_Text moneyLeftText;
 	[SerializeField] private TMP_Text moneyRightText;
 
+	public bool IsOpen => panel.activeSelf;
+
 	void Awake()
 	{
 		i = this;

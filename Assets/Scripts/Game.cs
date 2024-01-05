@@ -125,7 +125,7 @@ public class Game : MonoBehaviour
 
 		JobApplications = new List<Employee>
 		{
-			Employee.Generate(),
+			new Employee(NameGenerator.GenerateName(), 5432, 25, TimeSpan.Zero, new Skill[] { Skill.JavaScript, Skill.PHP }),
 			Employee.Generate(),
 			Employee.Generate(),
 		};

@@ -18,6 +18,8 @@ public class OrderViewPanel : MonoBehaviour
 	public static OrderViewPanel i;
 	public Order order { get; private set; }
 
+	public bool IsOpen => panel.activeSelf;
+
 	void Awake()
 	{
 		i = this;

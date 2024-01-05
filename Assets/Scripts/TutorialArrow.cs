@@ -10,7 +10,6 @@ public class TutorialArrow : MonoBehaviour
 	void Start()
 	{
 		originalPosition = transform.localPosition;
-		gameObject.SetActive(false);
 	}
 
 	private float time = 0;

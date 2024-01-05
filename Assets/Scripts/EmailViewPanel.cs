@@ -30,7 +30,7 @@ public class EmailViewPanel : MonoBehaviour
 
 	private ContentSizeFitter contentSizeFitter;
 
-	public bool isOpen => panel.activeSelf;
+	public bool IsOpen => panel.activeSelf;
 	void Awake()
 	{
 		i = this;
